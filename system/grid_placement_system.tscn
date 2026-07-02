@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dm7kygw83oiwf"]
+
+[ext_resource type="Script" uid="uid://l4bawoiqjncm" path="res://system/grid_placement_system.gd" id="1_w4cpb"]
+
+[sub_resource type="TileSet" id="TileSet_3v225"]
+tile_size = Vector2i(32, 32)
+
+[node name="GridPlacementSystem" type="Node2D" unique_id=994121627]
+script = ExtResource("1_w4cpb")
+
+[node name="GroundTileMapLayer" type="TileMapLayer" parent="." unique_id=852588691]
+tile_set = SubResource("TileSet_3v225")
+
+[node name="PlacementPreviewSprite2D" type="Sprite2D" parent="." unique_id=1142186717]
