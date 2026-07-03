@@ -2,12 +2,11 @@ class_name BuildUtility
 extends Control
 
 @export var grid_placememt_system: GridPlacementSystem
-@export var buildable_structures: Array[StructureResource]
+@export var game_state_manager: GameStateManager
 
 @onready var item_list: ItemList = $ItemList
 
 var last_built_item_index: int = -1
-var built_structures_tracker: Dictionary = {}
 
 func _ready():
 	assert(grid_placememt_system, "No active placement system")
@@ -16,7 +15,7 @@ func _ready():
 	_populate_item_list()
 
 func _populate_item_list():
-	for structure in buildable_structures:
+	for structure in game_state_manager.get_current_player_structure_manager().get_buildable_structure_list():
 		var item_index: int = item_list.add_item(structure.name, structure.texture)
 		item_list.set_item_metadata(item_index, structure)
 
@@ -41,13 +40,7 @@ func _on_structure_built() -> void:
 
 	var structure: StructureResource = item_list.get_item_metadata(last_built_item_index)
 	
-	if structure.is_building_limited:
-		if not built_structures_tracker.has(structure.name):
-			built_structures_tracker[structure.name] = 0
-			
-		built_structures_tracker[structure.name] += 1
-		
-		if built_structures_tracker[structure.name] >= structure.limit_amount:
-			item_list.remove_item(last_built_item_index)
+	if game_state_manager.get_current_player_structure_manager().on_structure_built(structure):
+		item_list.remove_item(last_built_item_index)
 			
 	last_built_item_index = -1
