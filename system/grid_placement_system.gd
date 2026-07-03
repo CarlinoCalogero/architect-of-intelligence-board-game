@@ -11,6 +11,8 @@ extends Node2D
 @export var grid_color: Color = Color(1, 1, 1, 0.2)
 @export var grid_line_thickness: float = 1.0
 
+const STRUCTURE_RESOURCE: Resource = preload("res://system/structure.tscn")
+
 var footprint: Array[Vector2i] = []
 var visual_offset: Vector2 = Vector2.ZERO
 
@@ -68,15 +70,14 @@ func _place_building() -> void:
 	if not _is_footprint_clear(current_grid_pos):
 		return
 
-	var sprite_node = Sprite2D.new()
-	sprite_node.texture = building_texture
-	
-	sprite_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
-	add_child(sprite_node)
+	var structure_node = STRUCTURE_RESOURCE.instantiate()
+	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
+	add_child(structure_node)
+	structure_node.texture = building_texture
 
 	for offset in footprint:
 		var claim_pos = current_grid_pos + offset
-		occupied_cells[claim_pos] = sprite_node
+		occupied_cells[claim_pos] = structure_node
 
 func _draw() -> void:
 	if ground_tile_map_layer.tile_set == null:
