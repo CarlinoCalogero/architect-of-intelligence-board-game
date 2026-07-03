@@ -1,18 +1,18 @@
 class_name GameStateManager
 extends Node
 
-const STRUCTURES_DEFINITION_RESOURCE: Resource = preload("uid://tt2j83gkervu")
+const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
 
 var players: Array = []
 var current_player_index: int = -1
 
-var structure_definition: StructureDefinition
+var game_definition: GameDefinition
 
 func _ready():
-	structure_definition = STRUCTURES_DEFINITION_RESOURCE.instantiate()
-	add_child(structure_definition)
+	game_definition = GAME_DEFINITION_RESOURCE.instantiate()
+	add_child(game_definition)
 	
-	var player: PlayerStateManager = PlayerStateManager.new(structure_definition)
+	var player: PlayerStateManager = PlayerStateManager.new(game_definition)
 	players.append(player)
 	current_player_index = 0
 

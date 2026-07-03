@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dso50mfa3p71h"]
+
+[ext_resource type="Script" uid="uid://ckj147guulx5x" path="res://game_definitions/game_definition.gd" id="1_udp7n"]
+[ext_resource type="PackedScene" uid="uid://tt2j83gkervu" path="res://game_definitions/structures_definition.tscn" id="2_0oul3"]
+[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="3_x8agf"]
+[ext_resource type="Texture2D" uid="uid://b815wo5o7yxc4" path="res://sprites/meeples/city.png" id="4_qjjr5"]
+[ext_resource type="Texture2D" uid="uid://c7ytwllm1dwyq" path="res://sprites/meeples/generative_ai_no_tier.png" id="5_xp61x"]
+
+[sub_resource type="Resource" id="Resource_j6scy"]
+script = ExtResource("3_x8agf")
+name = "City"
+texture = ExtResource("4_qjjr5")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
+[sub_resource type="Resource" id="Resource_0v6i5"]
+script = ExtResource("3_x8agf")
+name = "Generative AI"
+texture = ExtResource("5_xp61x")
+is_building_limited = true
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
+[node name="GameDefinition" type="Node" unique_id=1617683054]
+script = ExtResource("1_udp7n")
+
+[node name="StructuresDefinition" parent="." unique_id=916230121 instance=ExtResource("2_0oul3")]
+buildable_structures = Array[ExtResource("3_x8agf")]([SubResource("Resource_j6scy"), SubResource("Resource_0v6i5")])

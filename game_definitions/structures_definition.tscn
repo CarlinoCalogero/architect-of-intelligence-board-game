@@ -1,23 +1,6 @@
 [gd_scene format=3 uid="uid://tt2j83gkervu"]
 
 [ext_resource type="Script" uid="uid://dfs7ij8awex63" path="res://game_definitions/structures_definition.gd" id="1_f2pfu"]
-[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_odp13"]
-[ext_resource type="Texture2D" uid="uid://bd8yqo1b7b5v8" path="res://sprites/meeples/power_plant.png" id="3_lj5to"]
-[ext_resource type="Texture2D" uid="uid://c7ytwllm1dwyq" path="res://sprites/meeples/generative_ai_no_tier.png" id="4_lj5to"]
-
-[sub_resource type="Resource" id="Resource_w7672"]
-script = ExtResource("2_odp13")
-name = "Power Plant"
-texture = ExtResource("3_lj5to")
-metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
-
-[sub_resource type="Resource" id="Resource_kpgpm"]
-script = ExtResource("2_odp13")
-name = "Generative AI"
-texture = ExtResource("4_lj5to")
-is_building_limited = true
-metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
 
 [node name="StructuresDefinition" type="Node" unique_id=916230121]
 script = ExtResource("1_f2pfu")
-buildable_structures = Array[ExtResource("2_odp13")]([SubResource("Resource_w7672"), SubResource("Resource_kpgpm")])
