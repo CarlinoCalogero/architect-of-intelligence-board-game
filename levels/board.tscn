@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://nc0lebj58olw"]
 
 [ext_resource type="PackedScene" uid="uid://dm7kygw83oiwf" path="res://system/grid_placement_system.tscn" id="1_j4gyj"]
-[ext_resource type="Texture2D" uid="uid://rlmu8xoyah22" path="res://sprites/frieren.png" id="2_lkk7k"]
+[ext_resource type="Texture2D" uid="uid://b815wo5o7yxc4" path="res://sprites/meeples/city.png" id="2_lkk7k"]
 [ext_resource type="PackedScene" uid="uid://2ryqi3lk7cc2" path="res://system/game_camera.tscn" id="3_bd7e4"]
 
 [node name="Board" type="Node2D" unique_id=2078254691]
