@@ -13,8 +13,10 @@ extends Node2D
 
 const SCALE_PERCENTAGE: float = 0.8
 
+func _ready() -> void:
+	_reset()
+
 func _on_texture_changed() -> void:
-	print("miao")
 	structure_sprite_2d.texture = texture
 	
 	if texture != null:
@@ -31,5 +33,8 @@ func _on_texture_changed() -> void:
 				
 				if frame_texture != null:
 					original_size = frame_texture.get_size()
-					print("target size: [", target_size, "], original size: [", original_size, "]")
+		
 		animated_sprite_2d.scale = (target_size / original_size) * SCALE_PERCENTAGE
+
+func _reset():
+	animated_sprite_2d.hide()

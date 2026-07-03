@@ -11,4 +11,15 @@ script = ExtResource("1_w4cpb")
 [node name="GroundTileMapLayer" type="TileMapLayer" parent="." unique_id=852588691]
 tile_set = SubResource("TileSet_3v225")
 
-[node name="PlacementPreviewSprite2D" type="Sprite2D" parent="." unique_id=1142186717]
+[node name="BuiltStructures" type="Node2D" parent="." unique_id=1261364443]
+
+[node name="PlacementPreview" type="Node2D" parent="." unique_id=1042321173]
+
+[node name="ColorRect" type="ColorRect" parent="PlacementPreview" unique_id=945824505]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="PlacementPreview" unique_id=1345342726]

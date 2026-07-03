@@ -1,12 +1,49 @@
 [gd_scene format=3 uid="uid://nc0lebj58olw"]
 
+[ext_resource type="PackedScene" uid="uid://flb4i7rwdk5e" path="res://system/build_utility.tscn" id="1_bd7e4"]
 [ext_resource type="PackedScene" uid="uid://dm7kygw83oiwf" path="res://system/grid_placement_system.tscn" id="1_j4gyj"]
+[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_ict30"]
 [ext_resource type="Texture2D" uid="uid://b815wo5o7yxc4" path="res://sprites/meeples/city.png" id="2_lkk7k"]
 [ext_resource type="PackedScene" uid="uid://2ryqi3lk7cc2" path="res://system/game_camera.tscn" id="3_bd7e4"]
+[ext_resource type="Texture2D" uid="uid://bd8yqo1b7b5v8" path="res://sprites/meeples/power_plant.png" id="4_5qn5g"]
+[ext_resource type="Texture2D" uid="uid://bq2j3701eyief" path="res://sprites/meeples/water_treatment_plant.png" id="5_hixa1"]
+[ext_resource type="Texture2D" uid="uid://c7ytwllm1dwyq" path="res://sprites/meeples/generative_ai_no_tier.png" id="6_b7agx"]
+
+[sub_resource type="Resource" id="Resource_hixa1"]
+script = ExtResource("2_ict30")
+name = "City"
+texture = ExtResource("2_lkk7k")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
+[sub_resource type="Resource" id="Resource_b7agx"]
+script = ExtResource("2_ict30")
+name = "Power Plant"
+texture = ExtResource("4_5qn5g")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
+[sub_resource type="Resource" id="Resource_2ph8u"]
+script = ExtResource("2_ict30")
+name = "Water Treatment Plant"
+texture = ExtResource("5_hixa1")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
+[sub_resource type="Resource" id="Resource_hqrjl"]
+script = ExtResource("2_ict30")
+name = "Generative AI"
+texture = ExtResource("6_b7agx")
+is_building_limited = true
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
 
 [node name="Board" type="Node2D" unique_id=2078254691]
 
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=119603362]
+
+[node name="BuildUtility" parent="CanvasLayer" unique_id=1670495257 node_paths=PackedStringArray("grid_placememt_system") instance=ExtResource("1_bd7e4")]
+offset_right = -1152.0
+offset_bottom = -648.0
+grid_placememt_system = NodePath("../../GridPlacementSystem")
+buildable_structures = Array[ExtResource("2_ict30")]([SubResource("Resource_hixa1"), SubResource("Resource_b7agx"), SubResource("Resource_2ph8u"), SubResource("Resource_hqrjl")])
+
 [node name="GridPlacementSystem" parent="." unique_id=994121627 instance=ExtResource("1_j4gyj")]
-building_texture = ExtResource("2_lkk7k")
 
 [node name="GameCamera" parent="." unique_id=600219500 instance=ExtResource("3_bd7e4")]
