@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://nc0lebj58olw"]
 
 [ext_resource type="PackedScene" uid="uid://dm7kygw83oiwf" path="res://system/grid_placement_system.tscn" id="1_j4gyj"]
-[ext_resource type="Texture2D" uid="uid://rlmu8xoyah22" path="res://sprites/frieren.png" id="2_kbd6d"]
+[ext_resource type="Texture2D" uid="uid://18sojwj0hsip" path="res://sprites/katana.png" id="2_kbd6d"]
 
 [node name="Board" type="Node2D" unique_id=2078254691]
 
