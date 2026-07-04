@@ -50,8 +50,7 @@ func toggle_structures_item_list():
 
 func set_buildable_structure_subset(structure_keys: Array[String]):
 	for available_structure_key in current_buildable_structures:
-		if not structure_keys.has(available_structure_key):
-			item_list.set_item_disabled(current_buildable_structures[available_structure_key], true)
+		item_list.set_item_disabled(current_buildable_structures[available_structure_key], not structure_keys.has(available_structure_key))
 
 func _reset():
 	last_built_item_index = -1

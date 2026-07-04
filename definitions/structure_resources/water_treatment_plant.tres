@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StructureResource" format=3 uid="uid://dwgjxk7352pen"]
+
+[ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_cdu10"]
+[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_c1d7v"]
+[ext_resource type="Texture2D" uid="uid://bq2j3701eyief" path="res://sprites/meeples/water_treatment_plant.png" id="3_c1d7v"]
+
+[resource]
+script = ExtResource("2_c1d7v")
+name = "Water Treatment Plant"
+texture = ExtResource("3_c1d7v")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

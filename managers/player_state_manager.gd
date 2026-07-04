@@ -4,6 +4,7 @@ extends Resource
 var player_color: PlayerColorResource
 var player_resources: Dictionary[String, float]
 var built_structures_type_tracker: Dictionary = {}
+var last_built_structure_type: StructureResource
 
 func _init(new_player_color: PlayerColorResource, game_resources_list: Array[GameResource]):
 	player_color = new_player_color
@@ -19,10 +20,15 @@ func get_color() -> PlayerColorResource:
 func get_game_resources() -> Dictionary[String, float]:
 	return player_resources
 
+func get_last_built_structure_type() -> StructureResource:
+	return last_built_structure_type
+
 # -- UTILITY FUNCTIONS
 
 # If return is true player has built the maximum number of this type structure
 func check_if_player_has_built_all_structures_of_type(structure: StructureResource) -> bool:
+	last_built_structure_type = structure
+	
 	if structure.building_limit_amount > 0:
 		if not built_structures_type_tracker.has(structure.name):
 			built_structures_type_tracker[structure.name] = 0

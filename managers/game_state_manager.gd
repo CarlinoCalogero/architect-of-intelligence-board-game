@@ -23,6 +23,9 @@ func get_player_color(player_index: int) -> PlayerColorResource:
 func get_player_resources(player_index: int) -> Dictionary[String, float]:
 	return players[player_index].get_game_resources()
 
+func get_player_last_built_structure_type(player_index: int) -> StructureResource:
+	return players[player_index].get_last_built_structure_type()
+
 func update_player_resource(player_index: int, game_resource_key: String, value: float) -> void:
 	var new_value: float = players[player_index].update_game_resource(game_resource_key, value)
 	emit_signal("current_game_resource_changed", game_resource_key, new_value)

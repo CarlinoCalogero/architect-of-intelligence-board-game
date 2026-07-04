@@ -18,6 +18,10 @@ enum GamePhase {
 
 enum SetupTurnPhaseSubphases {
 	CITY_BUILDING,
+	FIRST_PLANT_BUILDING,
+	SECOND_PLANT_BUILDING,
+	GENERATIVE_AI_BUILDING,
+	RESOURCE_EARNINGS
 }
 
 const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
@@ -25,6 +29,9 @@ const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
 const GAME_STATE_MANAGER: Resource = preload("uid://bh1pyslmu1ara")
 # -- STRUCTURE RESOURCES
 const CITY_STRUCTURE_RESOURCE: StructureResource = preload("uid://l2bs1modugmn")
+const POWER_PLANT_STRUCTURE_RESOURCE: StructureResource = preload("uid://riyopulaq4d8")
+const WATER_TREATMENT_PLANT_STRUCTURE_RESOURCE: StructureResource = preload("uid://dwgjxk7352pen")
+const GENERATIVE_AI_NO_TIER_STRUCTURE_RESOURCE: StructureResource = preload("uid://cpqr0w0frd8mf")
 
 var local_player_index: int = 0 # The actual player playing locally on the machine
 var current_player_index: int = -1 # Must start at -1
@@ -105,23 +112,52 @@ func _setup_turn_phase():
 	
 	match current_setup_turn_phase_subphases:
 		SetupTurnPhaseSubphases.CITY_BUILDING:
-			_current_setup_turn_phase_player_city_building_subphases()
+			_current_setup_turn_phase_city_building_subphases()
+			return
+		
+		SetupTurnPhaseSubphases.FIRST_PLANT_BUILDING:
+			_current_setup_turn_phase_first_plant_building_subphases()
+			return
+		
+		SetupTurnPhaseSubphases.SECOND_PLANT_BUILDING:
+			_current_setup_turn_phase_second_plant_building_subphases()
+			return
+		
+		SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING:
+			_current_setup_turn_phase_generative_ai_no_tier_building_subphases()
+			return
+		
+		SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
 			return
 		
 	# Deal cards, spawn pieces, etc.
 	# When finished, move to the next phase:
 	_change_phase(GamePhase.PLAYER_TURN)
 
-func _current_setup_turn_phase_player_city_building_subphases():
-	
+func _current_setup_turn_phase_city_building_subphases():
+	_setup_turn_phase_building_subphase([CITY_STRUCTURE_RESOURCE.name], CITY_STRUCTURE_RESOURCE)
+
+func _current_setup_turn_phase_first_plant_building_subphases():
+	_setup_turn_phase_building_subphase([POWER_PLANT_STRUCTURE_RESOURCE.name, WATER_TREATMENT_PLANT_STRUCTURE_RESOURCE.name], [POWER_PLANT_STRUCTURE_RESOURCE, WATER_TREATMENT_PLANT_STRUCTURE_RESOURCE].pick_random(), "Plant")
+
+func _current_setup_turn_phase_second_plant_building_subphases():
+	var last_player_built_structure: StructureResource = game_state_manager.get_player_last_built_structure_type(current_player_index)
+	var structure_to_be_built: StructureResource = POWER_PLANT_STRUCTURE_RESOURCE
+	if POWER_PLANT_STRUCTURE_RESOURCE.name == last_player_built_structure.name:
+		structure_to_be_built = WATER_TREATMENT_PLANT_STRUCTURE_RESOURCE
+	_setup_turn_phase_building_subphase([structure_to_be_built.name], structure_to_be_built)
+
+func _current_setup_turn_phase_generative_ai_no_tier_building_subphases():
+	_setup_turn_phase_building_subphase([GENERATIVE_AI_NO_TIER_STRUCTURE_RESOURCE.name], GENERATIVE_AI_NO_TIER_STRUCTURE_RESOURCE)
+
+func _setup_turn_phase_building_subphase(whitelisted_structures: Array[String], cpu_player_structure_resource_to_be_built: StructureResource, text_log: String = cpu_player_structure_resource_to_be_built.name):
 	if current_player_index == local_player_index:
-		print("Waiting for local player to build a City...")
-		var whitelisted_cities: Array[String] = [CITY_STRUCTURE_RESOURCE.name]
-		emit_signal("buidable_structure_disabled", whitelisted_cities)
+		print("Waiting for local player to build a [", text_log, "]...")
+		emit_signal("buidable_structure_disabled", whitelisted_structures)
 		emit_signal("local_player_turn_started")
 	else:
-		print("[", get_current_player_color().name, "] is placing a City, please wait...")
-		cpu_player_manager.cpu_player_builds_structure(current_player_index, CITY_STRUCTURE_RESOURCE)
+		print("[", get_current_player_color().name, "] is placing a  [", text_log, "], please wait...")
+		cpu_player_manager.cpu_player_builds_structure(current_player_index, cpu_player_structure_resource_to_be_built)
 
 func new_game(number_of_players: int = 4):
 	if number_of_players > game_definition.get_max_number_of_players():
@@ -141,12 +177,28 @@ func on_structure_built(structure: StructureResource):
 	
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
-			
 			SetupTurnPhaseSubphases.CITY_BUILDING:
-				if current_player_index == local_player_index:
-					emit_signal("local_player_turn_ended")
-				_setup_turn_phase()
+				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.FIRST_PLANT_BUILDING)
 				return
+			
+			SetupTurnPhaseSubphases.FIRST_PLANT_BUILDING:
+				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.SECOND_PLANT_BUILDING)
+				return
+			
+			SetupTurnPhaseSubphases.SECOND_PLANT_BUILDING:
+				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING)
+				return
+			
+			SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING:
+				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.RESOURCE_EARNINGS)
+				return
+
+func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphases):
+	if current_player_index == local_player_index:
+		emit_signal("local_player_turn_ended")
+	elif current_player_index == game_state_manager.get_number_of_players() - 1:
+		current_setup_turn_phase_subphases = next_phase
+	_setup_turn_phase()
 
 func _on_current_game_resource_changed(game_resource_key: String, new_value: float):
 	emit_signal("game_resource_changed", game_resource_key, new_value)
