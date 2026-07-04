@@ -8,24 +8,30 @@ extends Control
 
 var last_built_item_index: int = -1
 var current_buildable_structures: Dictionary[String, float]
+var current_building_color: Color
 
 func _ready():
 	assert(grid_placememt_system, "No active placement system")
 	
-	GameManager.player_turn_started.connect(_on_player_turn_started)
-	GameManager.player_turn_ended.connect(_on_player_turn_ended)
+	GameManager.player_changed.connect(_on_player_changed)
+	GameManager.local_player_turn_started.connect(_on_local_player_turn_started)
+	GameManager.local_player_turn_ended.connect(_on_local_player_turn_ended)
 	GameManager.buidable_structure_disabled.connect(_on_buidable_structure_disabled)
 	
 	grid_placememt_system.structure_built.connect(_on_structure_built)
 	
 	_populate_item_list()
-	_on_player_turn_ended()
+	_on_local_player_turn_ended()
 
 func _populate_item_list():
 	for structure: StructureResource in GameManager.get_buildable_structure_list():
 		var item_index: int = item_list.add_item(structure.name, structure.texture)
 		item_list.set_item_metadata(item_index, structure)
 		current_buildable_structures[structure.name] = item_index
+
+func _change_buildings_color():
+	for i in range(item_list.item_count):
+		item_list.set_item_icon_modulate(i, current_building_color)
 
 func toggle_structures_item_list():
 	item_list.visible = not item_list.visible
@@ -59,17 +65,28 @@ func _on_structure_built() -> void:
 		current_buildable_structures.erase(structure.name)
 	
 	# -- Handle construction earnings
-	var on_build_earnings: Dictionary[String, float] = GameManager.get_earnings_from_structure_building_completion(structure)
+	var on_build_earnings: Dictionary[String, float] = _get_earnings_from_structure_building_completion(structure)
 	for game_resource_key in on_build_earnings:
 		var earned_amount: float = on_build_earnings[game_resource_key]
 		GameManager.update_current_player_resource(game_resource_key, earned_amount)
 	
 	last_built_item_index = -1
 
-func _on_player_turn_started():
+func _get_earnings_from_structure_building_completion(structure: StructureResource) -> Dictionary[String, float]:
+	var earnings:  Dictionary[String, float] = {}
+	for on_build_earning: Transaction in structure.on_build_earnings:
+		earnings[on_build_earning.resource_type.name] = on_build_earning.amount
+	return earnings
+
+func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
+	current_building_color = player_color.color
+	grid_placememt_system.set_building_color(current_building_color)
+	_change_buildings_color()
+
+func _on_local_player_turn_started():
 	button.disabled = false
 
-func _on_player_turn_ended():
+func _on_local_player_turn_ended():
 	item_list.hide()
 	button.disabled = true
 

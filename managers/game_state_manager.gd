@@ -3,32 +3,29 @@ extends Node
 
 signal current_game_resource_changed(game_resource_key: String, new_value: float)
 
-const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
-
 var players: Array = []
-var current_player_index: int = -1
 
-var game_definition: GameDefinition
-
-func _ready():
-	game_definition = GAME_DEFINITION_RESOURCE.instantiate()
-	add_child(game_definition)
-
-func setup(number_of_players: int) -> void:
-	for i in range(number_of_players):
-		var player: PlayerStateManager = PlayerStateManager.new(game_definition)
+func setup(player_colors: Array[PlayerColorResource], game_resources_list: Array[GameResource]) -> void:
+	for player_color_index in range(player_colors.size()):
+		var player: PlayerStateManager = PlayerStateManager.new(player_colors[player_color_index], game_resources_list)
 		players.append(player)
-		current_player_index = 0
 
-func get_current_player_structure_manager() -> StructureManager:
-	return players[current_player_index].get_structure_manager()
+# -- GAME STATE FUNCTIONS
 
-func get_current_player_game_resource_manager() -> GameResourceManager:
-	return players[current_player_index].get_game_resource_manager()
+func get_number_of_players() -> int:
+	return players.size()
 
-func get_current_player_resources() -> Dictionary[String, float]:
-	return players[current_player_index].get_game_resource_manager().get_current_resources()
+# -- PLAYER FUNCTIONS
 
-func update_current_player_resource(game_resource_key: String, value: float) -> void:
-	var new_value: float = players[current_player_index].get_game_resource_manager().update_current_resource(game_resource_key, value)
+func get_player_color(player_index: int) -> PlayerColorResource:
+	return players[player_index].get_color()
+
+func get_player_resources(player_index: int) -> Dictionary[String, float]:
+	return players[player_index].get_game_resources()
+
+func update_player_resource(player_index: int, game_resource_key: String, value: float) -> void:
+	var new_value: float = players[player_index].update_game_resource(game_resource_key, value)
 	emit_signal("current_game_resource_changed", game_resource_key, new_value)
+
+func check_if_player_has_built_all_structures_of_type(player_index: int, structure: StructureResource) -> bool:
+	return  players[player_index].check_if_player_has_built_all_structures_of_type(structure)

@@ -19,6 +19,7 @@ const STRUCTURE_RESOURCE: Resource = preload("res://system/structure.tscn")
 
 var is_enabled: bool = false
 var building_texture: Texture2D
+var building_color: Color
 var footprint: Array[Vector2i] = []
 var visual_offset: Vector2 = Vector2.ZERO
 
@@ -53,6 +54,7 @@ func _place_building() -> void:
 	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
 	built_structures.add_child(structure_node)
 	structure_node.texture = building_texture
+	structure_node.change_color(building_color)
 
 	for offset in footprint:
 		var claim_pos = current_grid_pos + offset
@@ -85,10 +87,14 @@ func _draw() -> void:
 			var end_point = Vector2(total_width, y * tile_size.y)
 			draw_line(start_point, end_point, grid_color, grid_line_thickness)
 
+func set_building_color(color: Color) -> void:
+	building_color = color
+
 func set_building(new_texture: Texture2D) -> void:
 	building_texture = new_texture
 	placement_preview_sprite_2d.texture = building_texture
-	placement_preview_sprite_2d.modulate = Color(1, 1, 1, 0.6)
+	
+	placement_preview_sprite_2d.modulate = Color(building_color.r, building_color.g, building_color.b, 0.6)
 	
 	var tile_size = ground_tile_map_layer.tile_set.tile_size
 	var tex_size = building_texture.get_size()

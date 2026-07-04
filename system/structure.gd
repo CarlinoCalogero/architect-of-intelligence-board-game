@@ -16,6 +16,9 @@ const SCALE_PERCENTAGE: float = 0.8
 func _ready() -> void:
 	_reset()
 
+func change_color(color: Color):
+	structure_sprite_2d.modulate = color
+
 func _on_texture_changed() -> void:
 	structure_sprite_2d.texture = texture
 	

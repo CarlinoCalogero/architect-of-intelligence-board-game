@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PlayerColor" format=3 uid="uid://wlqygefimiyg"]
+
+[ext_resource type="Script" uid="uid://dq3ouny8n8eo4" path="res://domain/player_color.gd" id="1_epqbx"]
+
+[resource]
+script = ExtResource("1_epqbx")
+name = "Red"
+color = Color(1, 0, 0, 1)
+metadata/_custom_type_script = "uid://dq3ouny8n8eo4"

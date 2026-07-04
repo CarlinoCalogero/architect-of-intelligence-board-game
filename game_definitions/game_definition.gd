@@ -3,20 +3,26 @@ extends Node
 
 var game_resources: Array[GameResource] = []
 var structures: Array[StructureResource] = []
+var player_colors: Array[PlayerColorResource] = []
 
 const BASE_RESOURCES_FOLDER_PATH: String = "res://definitions/"
 const GAME_RESOURCE_FOLDER: String = "game_resources"
 const STRUCTURE_RESOURCE_FOLDER: String = "structure_resources"
+const PLAYER_COLOR_RESOURCE_FOLDER: String = "player_colors"
 
 func _ready() -> void:
 	_load_all_game_resource_resources_from_folder()
 	_load_all_structure_resources_from_folder()
+	_load_all_player_color_resources_from_folder()
 
 func _load_all_game_resource_resources_from_folder():
 	_load_resources_from_folder(GAME_RESOURCE_FOLDER, game_resources)
 
 func _load_all_structure_resources_from_folder():
 	_load_resources_from_folder(STRUCTURE_RESOURCE_FOLDER, structures)
+
+func _load_all_player_color_resources_from_folder():
+	_load_resources_from_folder(PLAYER_COLOR_RESOURCE_FOLDER, player_colors)
 
 func _load_resources_from_folder(folder_name: String, resource_variable: Array) -> void:
 	# Open the folder
@@ -49,8 +55,16 @@ func _load_resources_from_folder(folder_name: String, resource_variable: Array) 
 	else:
 		print("Error: Could not open folder at ", path)
 
-func get_structures_definition() -> Array[StructureResource]:
+# -- GETTERS
+
+func get_buildable_structures() -> Array[StructureResource]:
 	return structures
 
 func get_game_resources() -> Array[GameResource]:
 	return game_resources
+
+func get_player_colors() -> Array[PlayerColorResource]:
+	return player_colors
+
+func get_max_number_of_players() -> int:
+	return player_colors.size()

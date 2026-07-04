@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://flb4i7rwdk5e"]
+
+[ext_resource type="Script" uid="uid://cadjtrn7f4p60" path="res://system/build_utility.gd" id="1_v3wlj"]
+
+[node name="BuildUtility" type="Control" unique_id=1670495257]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_v3wlj")
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="." unique_id=1922952533]
+layout_mode = 0
+offset_left = 483.0
+offset_top = 598.0
+offset_right = 531.0
+offset_bottom = 629.0
+text = "Build"
+
+[node name="ItemList" type="ItemList" parent="." unique_id=707975690]
+layout_mode = 1
+offset_left = 483.0
+offset_top = 305.0
+offset_right = 794.0
+offset_bottom = 597.0
+fixed_icon_size = Vector2i(64, 64)
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="item_clicked" from="ItemList" to="." method="_on_item_list_item_clicked"]
