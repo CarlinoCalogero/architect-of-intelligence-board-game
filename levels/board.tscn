@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ylnc7gmrtbw6" path="res://system/game_resources_utility.tscn" id="3_6vpbt"]
 [ext_resource type="PackedScene" uid="uid://2ryqi3lk7cc2" path="res://system/game_camera.tscn" id="3_bd7e4"]
 [ext_resource type="PackedScene" uid="uid://b6sd08oted551" path="res://system/dice_roll_utility.tscn" id="3_ict30"]
+[ext_resource type="PackedScene" uid="uid://w30sjjkdm1kt" path="res://system/notification_utility.tscn" id="4_ict30"]
 
 [node name="Board" type="Node2D" unique_id=2078254691]
 
@@ -19,6 +20,8 @@ grid_placememt_system = NodePath("../../GridPlacementSystem")
 
 [node name="DiceRollUtility" parent="CanvasLayer" unique_id=168901847 instance=ExtResource("3_ict30")]
 visible = false
+
+[node name="NotificationUtility" parent="CanvasLayer" unique_id=214369770 instance=ExtResource("4_ict30")]
 
 [node name="GridPlacementSystem" parent="." unique_id=994121627 instance=ExtResource("1_j4gyj")]
 

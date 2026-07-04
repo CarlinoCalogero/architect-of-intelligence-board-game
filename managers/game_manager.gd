@@ -7,6 +7,7 @@ signal buidable_structure_disabled(structure_keys: Array[String])
 signal game_resource_changed(game_resource_key: String, new_value: float)
 signal build_structure_requested(player_index: int, structure_type: StructureResource)
 signal dice_roll_requested(number_of_dice: int)
+signal push_notification_requested(message: String, display_time: float)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -209,4 +210,4 @@ func _on_cpu_player_manager_build_structure_requested(player_index: int, structu
 	emit_signal("build_structure_requested", player_index, structure_type)
 
 func on_dice_rolled(rolls: Array[int]):
-	print(rolls)
+	emit_signal("push_notification_requested", "Rolled: " + str(rolls))
