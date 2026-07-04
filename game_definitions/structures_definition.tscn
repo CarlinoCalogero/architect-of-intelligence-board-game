@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://tt2j83gkervu"]
-
-[ext_resource type="Script" uid="uid://dfs7ij8awex63" path="res://game_definitions/structures_definition.gd" id="1_f2pfu"]
-
-[node name="StructuresDefinition" type="Node" unique_id=916230121]
-script = ExtResource("1_f2pfu")

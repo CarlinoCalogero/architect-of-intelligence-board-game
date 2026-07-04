@@ -28,7 +28,7 @@ func _reset():
 func _on_button_pressed() -> void:
 	toggle_structures_item_list()
 
-func _on_item_list_item_clicked(index: int, at_position: Vector2, mouse_button_index: int) -> void:
+func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
 	last_built_item_index = index
 	var structure: StructureResource = item_list.get_item_metadata(index)
 	grid_placememt_system.set_building(structure.texture)

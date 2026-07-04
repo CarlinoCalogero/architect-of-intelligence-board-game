@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="GameResource" format=3 uid="uid://bs6f20tn7noet"]
+
+[ext_resource type="Script" uid="uid://dtwgj5njnvrpq" path="res://domain/game_resource_resource.gd" id="1_6ufa1"]
+
+[resource]
+script = ExtResource("1_6ufa1")
+name = "Electricity"
+unit_of_measurement = "MW"
+metadata/_custom_type_script = "uid://dtwgj5njnvrpq"
