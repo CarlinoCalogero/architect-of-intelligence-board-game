@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bh1pyslmu1ara" path="res://managers/game_state_manager.tscn" id="1_6vpbt"]
 [ext_resource type="PackedScene" uid="uid://flb4i7rwdk5e" path="res://system/build_utility.tscn" id="1_bd7e4"]
 [ext_resource type="PackedScene" uid="uid://dm7kygw83oiwf" path="res://system/grid_placement_system.tscn" id="1_j4gyj"]
+[ext_resource type="PackedScene" uid="uid://ylnc7gmrtbw6" path="res://system/game_resources_utility.tscn" id="3_6vpbt"]
 [ext_resource type="PackedScene" uid="uid://2ryqi3lk7cc2" path="res://system/game_camera.tscn" id="3_bd7e4"]
 
 [node name="Board" type="Node2D" unique_id=2078254691]
@@ -10,6 +11,9 @@
 [node name="GameStateManager" parent="." unique_id=1970714114 instance=ExtResource("1_6vpbt")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=119603362]
+
+[node name="GameResourcesUtility" parent="CanvasLayer" unique_id=1928582676 node_paths=PackedStringArray("game_state_manager") instance=ExtResource("3_6vpbt")]
+game_state_manager = NodePath("../../GameStateManager")
 
 [node name="BuildUtility" parent="CanvasLayer" unique_id=1670495257 node_paths=PackedStringArray("grid_placememt_system", "game_state_manager") instance=ExtResource("1_bd7e4")]
 offset_right = -1152.0

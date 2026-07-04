@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GameResource" format=3 uid="uid://cphipdqa44ra6"]
+
+[ext_resource type="Script" uid="uid://dtwgj5njnvrpq" path="res://domain/game_resource_resource.gd" id="1_x0gvb"]
+
+[resource]
+script = ExtResource("1_x0gvb")
+name = "Citizens"
+metadata/_custom_type_script = "uid://dtwgj5njnvrpq"

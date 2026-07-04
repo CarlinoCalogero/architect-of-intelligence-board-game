@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ylnc7gmrtbw6"]
+
+[ext_resource type="Script" uid="uid://bv451au4uh6xp" path="res://system/game_resources_utility.gd" id="1_hgjuj"]
+
+[node name="GameResourcesUtility" type="Control" unique_id=1928582676]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_hgjuj")
+metadata/_edit_use_anchors_ = true
+
+[node name="ItemList" type="ItemList" parent="." unique_id=198854929]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -198.0
+offset_bottom = 314.0
+grow_horizontal = 0
+fixed_icon_size = Vector2i(64, 64)

@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="StructureResource" format=3 uid="uid://l2bs1modugmn"]
+
+[ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_m5fsk"]
+[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_7rfim"]
+[ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="2_qpals"]
+[ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="3_lodwt"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="4_lodwt"]
+[ext_resource type="Texture2D" uid="uid://b815wo5o7yxc4" path="res://sprites/meeples/city.png" id="5_i0ob3"]
+[ext_resource type="Resource" uid="uid://cphipdqa44ra6" path="res://definitions/game_resources/citizens.tres" id="5_rju2x"]
+
+[sub_resource type="Resource" id="Resource_rju2x"]
+script = ExtResource("1_m5fsk")
+resource_type = ExtResource("2_qpals")
+amount = 300.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_kfxy1"]
+script = ExtResource("1_m5fsk")
+resource_type = ExtResource("3_lodwt")
+amount = 75.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_i0ob3"]
+script = ExtResource("1_m5fsk")
+resource_type = ExtResource("4_lodwt")
+amount = 300.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_tgxwc"]
+script = ExtResource("1_m5fsk")
+resource_type = ExtResource("5_rju2x")
+amount = 1000000.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[resource]
+script = ExtResource("2_7rfim")
+name = "City"
+texture = ExtResource("5_i0ob3")
+building_cost = Array[ExtResource("1_m5fsk")]([SubResource("Resource_rju2x"), SubResource("Resource_kfxy1"), SubResource("Resource_i0ob3")])
+on_build_earnings = Array[ExtResource("1_m5fsk")]([SubResource("Resource_tgxwc")])
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

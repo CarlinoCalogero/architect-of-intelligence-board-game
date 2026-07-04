@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_6ufa1")
 name = "Electricity"
-unit_of_measurement = "MW"
+unit_of_measurement = "Megawatt (MW)"
 metadata/_custom_type_script = "uid://dtwgj5njnvrpq"
