@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="StructureResource" format=3 uid="uid://cj7sa3ovu72sx"]
+
+[ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_khq6i"]
+[ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_66ds8"]
+[ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="2_uellr"]
+[ext_resource type="Texture2D" uid="uid://bvxsibdssn238" path="res://sprites/meeples/theory_of_mind_ai_base_tier.png" id="3_66ds8"]
+
+[sub_resource type="Resource" id="Resource_3llnv"]
+script = ExtResource("1_khq6i")
+resource_type = ExtResource("2_uellr")
+amount = 10.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[resource]
+script = ExtResource("2_66ds8")
+name = "Theory Of Mind AI (Base Tier)"
+texture = ExtResource("3_66ds8")
+building_limit_amount = 1
+building_cost = Array[ExtResource("1_khq6i")]([SubResource("Resource_3llnv")])
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

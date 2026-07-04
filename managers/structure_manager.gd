@@ -18,6 +18,6 @@ func on_structure_built(structure: StructureResource) -> bool:
 			
 		built_structures_tracker[structure.name] += 1
 		
-		if built_structures_tracker[structure.name] >= structure.limit_amount:
+		if built_structures_tracker[structure.name] >= structure.building_limit_amount:
 			return true
 	return false
