@@ -18,6 +18,7 @@ offset_left = 483.0
 offset_top = 598.0
 offset_right = 531.0
 offset_bottom = 629.0
+mouse_default_cursor_shape = 2
 text = "Build"
 
 [node name="ItemList" type="ItemList" parent="." unique_id=707975690]
