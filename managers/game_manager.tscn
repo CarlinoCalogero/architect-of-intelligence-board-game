@@ -4,3 +4,5 @@
 
 [node name="GameManager" type="Node" unique_id=248288835]
 script = ExtResource("1_atyjh")
+
+[node name="CPUPlayerWaitTimer" type="Timer" parent="." unique_id=169772672]

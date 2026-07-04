@@ -22,7 +22,7 @@ func on_structure_built(structure: StructureResource) -> bool:
 			return true
 	return false
 
-func get_structure_on_build_earnings(structure: StructureResource) -> Dictionary[String, float]:
+func get_earnings_from_structure_building_completion(structure: StructureResource) -> Dictionary[String, float]:
 	var earnings:  Dictionary[String, float] = {}
 	for on_build_earning: Transaction in structure.on_build_earnings:
 		earnings[on_build_earning.resource_type.name] = on_build_earning.amount
