@@ -64,14 +64,14 @@ func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button
 	grid_placememt_system.set_building(structure.texture)
 	item_list.hide()
 
-func _on_structure_built() -> void:
+func _on_structure_built(cell_position: Vector2i) -> void:
 	if last_built_item_index < 0 or last_built_item_index >= item_list.item_count:
 		return
 
 	var structure: StructureResource = item_list.get_item_metadata(last_built_item_index)
 	
 	# -- Handle structure build limit
-	if GameManager.on_structure_built(structure):
+	if GameManager.on_structure_built(structure, cell_position):
 		item_list.remove_item(last_built_item_index)
 		current_buildable_structures.erase(structure.name)
 	

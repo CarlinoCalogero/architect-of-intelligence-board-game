@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="4_lodwt"]
 [ext_resource type="Texture2D" uid="uid://b815wo5o7yxc4" path="res://sprites/meeples/city.png" id="5_i0ob3"]
 [ext_resource type="Resource" uid="uid://cphipdqa44ra6" path="res://definitions/game_resources/citizens.tres" id="5_rju2x"]
+[ext_resource type="Script" uid="uid://ck6fuemortsgr" path="res://domain/game_resource_formula.gd" id="7_rju2x"]
 
 [sub_resource type="Resource" id="Resource_rju2x"]
 script = ExtResource("1_m5fsk")

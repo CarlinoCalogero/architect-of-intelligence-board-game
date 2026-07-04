@@ -76,8 +76,8 @@ func get_current_player_resources() -> Dictionary[String, float]:
 func update_current_player_resource(game_resource_key: String, value: float) -> void:
 	game_state_manager.update_player_resource(current_player_index, game_resource_key, value)
 
-func check_if_current_player_has_built_all_structures_of_type(structure: StructureResource) -> bool:
-	return game_state_manager.check_if_player_has_built_all_structures_of_type(current_player_index, structure)
+func add_current_player_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
+	return game_state_manager.add_built_structure(current_player_index, structure, cell)
 
 # -- GAME FLOW FUNCTIONS
 
@@ -172,8 +172,8 @@ func new_game(number_of_players: int = 4):
 	
 	_change_phase(GamePhase.SETUP_TURN)
 
-func on_structure_built(structure: StructureResource):
-	check_if_current_player_has_built_all_structures_of_type(structure)
+func on_structure_built(structure: StructureResource, cell_position: Vector2i):
+	add_current_player_built_structure(structure, cell_position)
 	
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:

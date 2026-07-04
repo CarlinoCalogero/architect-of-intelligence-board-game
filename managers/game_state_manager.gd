@@ -30,5 +30,5 @@ func update_player_resource(player_index: int, game_resource_key: String, value:
 	var new_value: float = players[player_index].update_game_resource(game_resource_key, value)
 	emit_signal("current_game_resource_changed", game_resource_key, new_value)
 
-func check_if_player_has_built_all_structures_of_type(player_index: int, structure: StructureResource) -> bool:
-	return  players[player_index].check_if_player_has_built_all_structures_of_type(structure)
+func add_built_structure(player_index: int, structure: StructureResource, cell: Vector2i) -> bool:
+	return  players[player_index].add_built_structure(structure, cell)

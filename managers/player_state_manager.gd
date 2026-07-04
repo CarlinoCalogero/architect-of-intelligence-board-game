@@ -1,9 +1,18 @@
 class_name PlayerStateManager
 extends Resource
 
+class BuiltData:
+	var structure: StructureResource
+	var cell_position: Vector2i
+	
+	func _init(new_structure: StructureResource, new_cell_position: Vector2i) -> void:
+		structure = new_structure
+		cell_position = new_cell_position
+
 var player_color: PlayerColorResource
 var player_resources: Dictionary[String, float]
-var built_structures_type_tracker: Dictionary = {}
+var built_structures: Dictionary[String, Array] = {}
+
 var last_built_structure_type: StructureResource
 
 func _init(new_player_color: PlayerColorResource, game_resources_list: Array[GameResource]):
@@ -26,16 +35,18 @@ func get_last_built_structure_type() -> StructureResource:
 # -- UTILITY FUNCTIONS
 
 # If return is true player has built the maximum number of this type structure
-func check_if_player_has_built_all_structures_of_type(structure: StructureResource) -> bool:
+func add_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	last_built_structure_type = structure
 	
+	var new_building_data = BuiltData.new(structure, cell)
+	
+	if built_structures.has(structure.name):
+		built_structures[structure.name].append(new_building_data)
+	else:
+		built_structures[structure.name] = [new_building_data]
+	
 	if structure.building_limit_amount > 0:
-		if not built_structures_type_tracker.has(structure.name):
-			built_structures_type_tracker[structure.name] = 0
-		
-		built_structures_type_tracker[structure.name] += 1
-		
-		if built_structures_type_tracker[structure.name] >= structure.building_limit_amount:
+		if built_structures[structure.name].size() >= structure.building_limit_amount:
 			return true
 	
 	return false

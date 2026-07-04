@@ -1,7 +1,7 @@
 class_name GridPlacementSystem
 extends Node2D
 
-signal structure_built
+signal structure_built(cell_position: Vector2i)
 
 @onready var ground_tile_map_layer: TileMapLayer = $GroundTileMapLayer
 @onready var built_structures: Node2D = $BuiltStructures
@@ -124,7 +124,7 @@ func _place_building() -> void:
 		occupied_cells[claim_pos] = structure_node
 	
 	_reset()
-	emit_signal("structure_built")
+	emit_signal("structure_built", current_grid_pos)
 
 func _setup_building_texture(new_texture: Texture2D) -> void:
 	building_texture = new_texture
