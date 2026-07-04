@@ -13,10 +13,12 @@ var game_definition: GameDefinition
 func _ready():
 	game_definition = GAME_DEFINITION_RESOURCE.instantiate()
 	add_child(game_definition)
-	
-	var player: PlayerStateManager = PlayerStateManager.new(game_definition)
-	players.append(player)
-	current_player_index = 0
+
+func setup(number_of_players: int) -> void:
+	for i in range(number_of_players):
+		var player: PlayerStateManager = PlayerStateManager.new(game_definition)
+		players.append(player)
+		current_player_index = 0
 
 func get_current_player_structure_manager() -> StructureManager:
 	return players[current_player_index].get_structure_manager()

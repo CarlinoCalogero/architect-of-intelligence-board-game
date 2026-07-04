@@ -1,8 +1,7 @@
 class_name GameResourcesUtility
 extends Control
 
-@export var game_state_manager: GameStateManager
-
+@onready var game_state_manager: GameStateManager = GameManager.get_game_state_manager()
 @onready var item_list: ItemList = $ItemList
 
 var game_resource_indexes: Dictionary[String, int] = {}

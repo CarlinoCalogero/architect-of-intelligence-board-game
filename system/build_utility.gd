@@ -2,7 +2,7 @@ class_name BuildUtility
 extends Control
 
 @export var grid_placememt_system: GridPlacementSystem
-@export var game_state_manager: GameStateManager
+@onready var game_state_manager: GameStateManager = GameManager.get_game_state_manager()
 
 @onready var item_list: ItemList = $ItemList
 
