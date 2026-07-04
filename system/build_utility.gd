@@ -80,6 +80,7 @@ func _get_earnings_from_structure_building_completion(structure: StructureResour
 
 func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
 	current_building_color = player_color.color
+	print("Building color: [", current_building_color, "]")
 	grid_placememt_system.set_building_color(current_building_color)
 	_change_buildings_color()
 

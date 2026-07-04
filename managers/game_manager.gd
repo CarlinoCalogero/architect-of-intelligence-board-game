@@ -83,6 +83,7 @@ func _change_phase(new_phase: GamePhase) -> void:
 	
 	match current_state:
 		GamePhase.SETUP_TURN:
+			print("Setting up the board...")
 			_setup_turn_phase()
 			return
 			
@@ -93,6 +94,12 @@ func _change_phase(new_phase: GamePhase) -> void:
 			return
 
 func _setup_turn_phase():
+	# Remove later
+	cpu_player_wait_timer.start()
+	await cpu_player_wait_timer.timeout
+	# Remove later
+	
+	_compute_next_player_index()
 	
 	match current_setup_turn_phase_subphases:
 		SetupTurnPhaseSubphases.CITY_BUILDING:
@@ -104,18 +111,14 @@ func _setup_turn_phase():
 	_change_phase(GamePhase.PLAYER_TURN)
 
 func _current_setup_turn_phase_player_city_building_subphases():
-	# Remove later
-	cpu_player_wait_timer.start()
-	await cpu_player_wait_timer.timeout
-	# Remove later
-
-	_compute_next_player_index()
 	
 	if current_player_index == local_player_index:
-		print("Setting up the board...")
+		print("Waiting for local player to build a City...")
 		var whitelisted_cities: Array[String] = [CITY_STRUCTURE_RESOURCE.name]
 		emit_signal("buidable_structure_disabled", whitelisted_cities)
 		emit_signal("local_player_turn_started")
+	else:
+		print("[", get_current_player_color().name, "] is placing a City, please wait...")
 
 func new_game(number_of_players: int = 4):
 	if number_of_players > game_definition.get_max_number_of_players():
