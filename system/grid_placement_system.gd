@@ -46,23 +46,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("place_structure"):
 		_place_building()
 
-func _place_building() -> void:
-	if not _is_footprint_clear(current_grid_pos):
-		return
-
-	var structure_node = STRUCTURE_RESOURCE.instantiate()
-	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
-	built_structures.add_child(structure_node)
-	structure_node.texture = building_texture
-	structure_node.change_color(building_color)
-
-	for offset in footprint:
-		var claim_pos = current_grid_pos + offset
-		occupied_cells[claim_pos] = structure_node
-	
-	_reset()
-	emit_signal("structure_built")
-
 func _draw() -> void:
 	if ground_tile_map_layer.tile_set == null:
 		return
@@ -87,14 +70,64 @@ func _draw() -> void:
 			var end_point = Vector2(total_width, y * tile_size.y)
 			draw_line(start_point, end_point, grid_color, grid_line_thickness)
 
+# -- SETTER
+
 func set_building_color(color: Color) -> void:
 	building_color = color
 
-func set_building(new_texture: Texture2D) -> void:
-	building_texture = new_texture
-	placement_preview_sprite_2d.texture = building_texture
+# -- UTILITY
+
+func get_random_valid_build_location() -> Vector2i:
+	var all_board_tiles: Array[Vector2i] = ground_tile_map_layer.get_used_cells()
+	var valid_placement_spots: Array[Vector2i] = []
 	
+	# Loop through all of them to see if the current building fits
+	for tile in all_board_tiles:
+		# We use your existing footprint check! 
+		# This guarantees no part of the building overlaps another structure.
+		if _is_footprint_clear(tile):
+			valid_placement_spots.append(tile)
+			
+	# Safety check: What if the board is completely full?
+	if valid_placement_spots.is_empty():
+		push_warning("The board is full! No valid placement spots found.")
+		return Vector2i.ZERO # Return a fallback (you might want to handle this in GameManager)
+		
+	# Pick a random valid spot from our approved list
+	return valid_placement_spots.pick_random()
+
+func place_random_building(new_texture: Texture2D):
+	_setup_building_texture(new_texture)
+	current_grid_pos = get_random_valid_build_location()
+	_place_building()
+
+func set_building(new_texture: Texture2D) -> void:
+	_setup_building_texture(new_texture)
+	
+	placement_preview_sprite_2d.texture = building_texture
 	placement_preview_sprite_2d.modulate = Color(building_color.r, building_color.g, building_color.b, 0.6)
+	
+	_enable()
+
+func _place_building() -> void:
+	if not _is_footprint_clear(current_grid_pos):
+		return
+
+	var structure_node = STRUCTURE_RESOURCE.instantiate()
+	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
+	built_structures.add_child(structure_node)
+	structure_node.texture = building_texture
+	structure_node.change_color(building_color)
+
+	for offset in footprint:
+		var claim_pos = current_grid_pos + offset
+		occupied_cells[claim_pos] = structure_node
+	
+	_reset()
+	emit_signal("structure_built")
+
+func _setup_building_texture(new_texture: Texture2D) -> void:
+	building_texture = new_texture
 	
 	var tile_size = ground_tile_map_layer.tile_set.tile_size
 	var tex_size = building_texture.get_size()
@@ -110,8 +143,6 @@ func set_building(new_texture: Texture2D) -> void:
 	var offset_x = -(tiles_wide - 1) * tile_size.x / 2.0
 	var offset_y = -(tiles_tall - 1) * tile_size.y / 2.0
 	visual_offset = Vector2(offset_x, offset_y)
-	
-	_enable()
 
 func _is_footprint_clear(base_pos: Vector2i) -> bool:
 	for offset in footprint:

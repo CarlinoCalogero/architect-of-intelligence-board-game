@@ -7,7 +7,7 @@ extends Control
 @onready var item_list: ItemList = $ItemList
 
 var last_built_item_index: int = -1
-var current_buildable_structures: Dictionary[String, float]
+var current_buildable_structures: Dictionary[String, int]
 var current_building_color: Color
 
 func _ready():
@@ -17,11 +17,23 @@ func _ready():
 	GameManager.local_player_turn_started.connect(_on_local_player_turn_started)
 	GameManager.local_player_turn_ended.connect(_on_local_player_turn_ended)
 	GameManager.buidable_structure_disabled.connect(_on_buidable_structure_disabled)
+	GameManager.build_structure_requested.connect(_on_build_structure_requested)
 	
 	grid_placememt_system.structure_built.connect(_on_structure_built)
 	
 	_populate_item_list()
 	_on_local_player_turn_ended()
+
+# -- UTILITY
+
+func _find_structure_item_list_index(target_structure: StructureResource) -> int:
+	for item_index in range(item_list.item_count):
+		
+		var structure: StructureResource = item_list.get_item_metadata(item_index)
+		
+		if structure.name == target_structure.name:
+			return item_index
+	return -1
 
 func _populate_item_list():
 	for structure: StructureResource in GameManager.get_buildable_structure_list():
@@ -93,3 +105,10 @@ func _on_local_player_turn_ended():
 
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
+
+func _on_build_structure_requested(_player_index: int, structure_type: StructureResource):
+	var structure_type_index: int = _find_structure_item_list_index(structure_type)
+	if structure_type_index == -1:
+		return
+	last_built_item_index = structure_type_index
+	grid_placememt_system.place_random_building(structure_type.texture)

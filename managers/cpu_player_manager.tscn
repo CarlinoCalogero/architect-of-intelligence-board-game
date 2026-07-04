@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bgtuaal65u53c"]
+
+[ext_resource type="Script" uid="uid://crrngiqtvuumo" path="res://managers/cpu_player_manager.gd" id="1_ga4hh"]
+
+[node name="CPUPlayerManager" type="Node" unique_id=66729122]
+script = ExtResource("1_ga4hh")

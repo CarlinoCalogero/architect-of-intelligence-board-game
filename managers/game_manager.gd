@@ -5,8 +5,10 @@ signal local_player_turn_started
 signal local_player_turn_ended
 signal buidable_structure_disabled(structure_keys: Array[String])
 signal game_resource_changed(game_resource_key: String, new_value: float)
+signal build_structure_requested(player_index: int, structure_type: StructureResource)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
+@onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
 
 enum GamePhase {
 	MAIN_MENU,
@@ -119,6 +121,7 @@ func _current_setup_turn_phase_player_city_building_subphases():
 		emit_signal("local_player_turn_started")
 	else:
 		print("[", get_current_player_color().name, "] is placing a City, please wait...")
+		cpu_player_manager.cpu_player_builds_structure(current_player_index, CITY_STRUCTURE_RESOURCE)
 
 func new_game(number_of_players: int = 4):
 	if number_of_players > game_definition.get_max_number_of_players():
@@ -147,3 +150,6 @@ func on_structure_built(structure: StructureResource):
 
 func _on_current_game_resource_changed(game_resource_key: String, new_value: float):
 	emit_signal("game_resource_changed", game_resource_key, new_value)
+
+func _on_cpu_player_manager_build_structure_requested(player_index: int, structure_type: StructureResource) -> void:
+	emit_signal("build_structure_requested", player_index, structure_type)
