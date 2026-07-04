@@ -135,8 +135,10 @@ func on_structure_built(structure: StructureResource):
 	
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
+			
 			SetupTurnPhaseSubphases.CITY_BUILDING:
-				emit_signal("local_player_turn_ended")
+				if current_player_index == local_player_index:
+					emit_signal("local_player_turn_ended")
 				_setup_turn_phase()
 				return
 
