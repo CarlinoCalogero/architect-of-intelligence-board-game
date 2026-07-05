@@ -2,9 +2,16 @@
 
 [ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_cdu10"]
 [ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_c1d7v"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="2_cwgep"]
 [ext_resource type="Texture2D" uid="uid://bq2j3701eyief" path="res://sprites/meeples/water_treatment_plant.png" id="3_c1d7v"]
 [ext_resource type="Script" uid="uid://ck6fuemortsgr" path="res://domain/game_resource_formula.gd" id="3_vnnqg"]
 [ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="4_cwgep"]
+
+[sub_resource type="Resource" id="Resource_k4w7a"]
+script = ExtResource("1_cdu10")
+resource_type = ExtResource("2_cwgep")
+amount = 200000000.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
 
 [sub_resource type="Resource" id="Resource_xc5uj"]
 script = ExtResource("3_vnnqg")
@@ -25,6 +32,7 @@ metadata/_custom_type_script = "uid://ck6fuemortsgr"
 script = ExtResource("2_c1d7v")
 name = "Water Treatment Plant"
 texture = ExtResource("3_c1d7v")
+building_cost = Array[ExtResource("1_cdu10")]([SubResource("Resource_k4w7a")])
 setup_phase_production = Array[ExtResource("3_vnnqg")]([SubResource("Resource_xc5uj")])
 turn_production = Array[ExtResource("3_vnnqg")]([SubResource("Resource_vnnqg")])
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

@@ -180,6 +180,9 @@ func _change_phase(new_phase: GamePhase) -> void:
 
 func _setup_turn_phase():
 	
+	cpu_player_wait_timer.start()
+	await cpu_player_wait_timer.timeout
+	
 	_compute_next_player_index()
 	
 	match current_setup_turn_phase_subphases:
@@ -319,7 +322,7 @@ func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphas
 func _on_current_game_resource_changed(game_resource: GameResource, new_value: float):
 	emit_signal("game_resource_changed", game_resource, new_value)
 	var player_text: String = "You have"
-	if local_player_index != current_player_index:
+	if not is_local_player_playing():
 		var player_color: PlayerColorResource = game_state_manager.get_player_color(current_player_index)
 		player_text = str(player_color.name) + " has"
 	var unit_of_measurement: String = str(game_resource.unit_of_measurement)

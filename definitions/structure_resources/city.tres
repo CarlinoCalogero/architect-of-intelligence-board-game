@@ -24,7 +24,7 @@ metadata/_custom_type_script = "uid://wmvrr6eojje1"
 [sub_resource type="Resource" id="Resource_i0ob3"]
 script = ExtResource("1_m5fsk")
 resource_type = ExtResource("4_lodwt")
-amount = 300.0
+amount = 3000000000.0
 metadata/_custom_type_script = "uid://wmvrr6eojje1"
 
 [sub_resource type="Resource" id="Resource_tgxwc"]
@@ -36,7 +36,7 @@ metadata/_custom_type_script = "uid://wmvrr6eojje1"
 [sub_resource type="Resource" id="Resource_xgv4e"]
 script = ExtResource("7_rju2x")
 resource_type = ExtResource("4_lodwt")
-base_value = 150.0
+base_value = 150000000.0
 number_of_dice_to_roll = 1
 multiplier_value = 10000000.0
 metadata/_custom_type_script = "uid://ck6fuemortsgr"

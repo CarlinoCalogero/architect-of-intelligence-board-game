@@ -2,9 +2,16 @@
 
 [ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_4u74s"]
 [ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_malce"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="2_mekxv"]
 [ext_resource type="Texture2D" uid="uid://bd8yqo1b7b5v8" path="res://sprites/meeples/power_plant.png" id="3_malce"]
 [ext_resource type="Script" uid="uid://ck6fuemortsgr" path="res://domain/game_resource_formula.gd" id="3_u7imr"]
 [ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="4_mekxv"]
+
+[sub_resource type="Resource" id="Resource_kqqh7"]
+script = ExtResource("1_4u74s")
+resource_type = ExtResource("2_mekxv")
+amount = 500000000.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
 
 [sub_resource type="Resource" id="Resource_haj1j"]
 script = ExtResource("3_u7imr")
@@ -25,6 +32,7 @@ metadata/_custom_type_script = "uid://ck6fuemortsgr"
 script = ExtResource("2_malce")
 name = "Power Plant"
 texture = ExtResource("3_malce")
+building_cost = Array[ExtResource("1_4u74s")]([SubResource("Resource_kqqh7")])
 setup_phase_production = Array[ExtResource("3_u7imr")]([SubResource("Resource_haj1j")])
 turn_production = Array[ExtResource("3_u7imr")]([SubResource("Resource_u7imr")])
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
