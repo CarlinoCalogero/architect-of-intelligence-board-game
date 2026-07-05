@@ -12,6 +12,7 @@ var last_built_item_index: int = -1
 var last_built_structure: StructureResource = null
 var current_buildable_structures: Dictionary[String, int]
 var current_building_color: Color
+var current_player_index: int = -1
 
 func _ready():
 	assert(grid_placememt_system, "No active placement system")
@@ -78,7 +79,7 @@ func _on_button_pressed() -> void:
 func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
 	last_built_item_index = index
 	var structure: StructureResource = item_list.get_item_metadata(index)
-	grid_placememt_system.set_building(structure.texture)
+	grid_placememt_system.set_building(structure, current_player_index)
 	item_list.hide()
 
 func _on_structure_built(cell_position: Vector2i) -> void:
@@ -108,7 +109,8 @@ func _on_structure_built(cell_position: Vector2i) -> void:
 		for building_cost: Transaction in structure.building_cost:
 			GameManager.update_current_player_resource(building_cost.resource_type, -building_cost.amount, built_data)
 
-func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
+func _on_player_changed(new_player_index: int, player_color: PlayerColorResource):
+	current_player_index = new_player_index
 	current_building_color = player_color.color
 	print("Building color: [", current_building_color, "]")
 	grid_placememt_system.set_building_color(current_building_color)
@@ -132,8 +134,7 @@ func _compute_buildable_structures_based_on_available_resources():
 				is_disabled = true
 				break # The player can't afford this, STOP checking the other costs!
 		
-		print("Build List Update | current player resources: ", current_player_resources)
-		print("Build List Update | structure: [", structure.name, "], can be built: [", is_disabled,"]")
+		# print("Build List Update | structure: [", structure.name, "], can be built: [", is_disabled,"]")
 		
 		item_list.set_item_disabled(item_index, is_disabled)
 
@@ -145,7 +146,7 @@ func _on_enable_all_buildable_structures() -> void:
 
 func _on_build_structure_requested(structure: StructureResource):
 	last_built_structure = structure
-	grid_placememt_system.place_random_building(structure.texture)
+	grid_placememt_system.place_random_building(structure, current_player_index)
 
 func _on_set_build_utility_disabled_requested(is_disabled: bool):
 	_set_utility_disabled(is_disabled)

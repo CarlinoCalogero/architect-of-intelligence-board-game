@@ -18,12 +18,14 @@ signal structure_built(cell_position: Vector2i)
 const STRUCTURE_RESOURCE: Resource = preload("res://system/structure.tscn")
 
 var is_enabled: bool = false
+var player_owner_index: int = -1
 var building_texture: Texture2D
 var building_color: Color
 var footprint: Array[Vector2i] = []
 var visual_offset: Vector2 = Vector2.ZERO
 
 var current_grid_pos: Vector2i
+var current_building_structure: StructureResource
 var occupied_cells: Dictionary = {}
 
 func _ready() -> void:
@@ -96,13 +98,19 @@ func get_random_valid_build_location() -> Vector2i:
 	# Pick a random valid spot from our approved list
 	return valid_placement_spots.pick_random()
 
-func place_random_building(new_texture: Texture2D):
-	_setup_building_texture(new_texture)
+func setup_building_placement(building: StructureResource, player_index: int):
+	current_building_structure = building
+	_setup_building_texture(building.texture)
+	player_owner_index = player_index
+
+func place_random_building(building: StructureResource, player_index: int):
+	setup_building_placement(building, player_index)
+	
 	current_grid_pos = get_random_valid_build_location()
 	_place_building()
 
-func set_building(new_texture: Texture2D) -> void:
-	_setup_building_texture(new_texture)
+func set_building(building: StructureResource, player_index: int) -> void:
+	setup_building_placement(building, player_index)
 	
 	placement_preview_sprite_2d.texture = building_texture
 	placement_preview_sprite_2d.modulate = Color(building_color.r, building_color.g, building_color.b, 0.6)
@@ -113,10 +121,12 @@ func _place_building() -> void:
 	if not _is_footprint_clear(current_grid_pos):
 		return
 
-	var structure_node = STRUCTURE_RESOURCE.instantiate()
+	var structure_node: Structure = STRUCTURE_RESOURCE.instantiate()
 	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
 	built_structures.add_child(structure_node)
-	structure_node.texture = building_texture
+	structure_node.structure_resource = current_building_structure
+	structure_node.cell_position = current_grid_pos
+	structure_node.player_owner_index = player_owner_index
 	structure_node.change_color(building_color)
 
 	for offset in footprint:

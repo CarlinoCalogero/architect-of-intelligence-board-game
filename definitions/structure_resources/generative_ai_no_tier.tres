@@ -1,12 +1,43 @@
 [gd_resource type="Resource" script_class="StructureResource" format=3 uid="uid://cpqr0w0frd8mf"]
 
 [ext_resource type="Script" uid="uid://wmvrr6eojje1" path="res://domain/transaction.gd" id="1_8pojp"]
+[ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="2_f4m0f"]
 [ext_resource type="Script" uid="uid://dsgv5s4ki0om6" path="res://domain/structure_resource.gd" id="2_lahfj"]
+[ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="3_bec3n"]
+[ext_resource type="Script" uid="uid://ck6fuemortsgr" path="res://domain/game_resource_formula.gd" id="3_ehobh"]
 [ext_resource type="Texture2D" uid="uid://c7ytwllm1dwyq" path="res://sprites/meeples/generative_ai_no_tier.png" id="3_lahfj"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="4_8dckm"]
+[ext_resource type="Texture2D" uid="uid://begfqnpnoubqy" path="res://sprites/meeples/generative_ai_base_tier.png" id="7_jmrt5"]
+
+[sub_resource type="Resource" id="Resource_caktq"]
+script = ExtResource("1_8pojp")
+resource_type = ExtResource("2_f4m0f")
+amount = 400.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_82hx7"]
+script = ExtResource("1_8pojp")
+resource_type = ExtResource("3_bec3n")
+amount = 60.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_7xppa"]
+script = ExtResource("1_8pojp")
+resource_type = ExtResource("4_8dckm")
+amount = 100000000.0
+metadata/_custom_type_script = "uid://wmvrr6eojje1"
+
+[sub_resource type="Resource" id="Resource_i817q"]
+script = ExtResource("2_lahfj")
+name = "Generative AI (Base Tier)"
+texture = ExtResource("7_jmrt5")
+building_cost = Array[ExtResource("1_8pojp")]([SubResource("Resource_caktq"), SubResource("Resource_82hx7"), SubResource("Resource_7xppa")])
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
 
 [resource]
 script = ExtResource("2_lahfj")
 name = "Generative AI (No Tier)"
 texture = ExtResource("3_lahfj")
 building_limit_amount = 1
+next_tier = SubResource("Resource_i817q")
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

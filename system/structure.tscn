@@ -63,3 +63,64 @@ sprite_frames = SubResource("SpriteFrames_j7f26")
 autoplay = "default"
 frame = 3
 frame_progress = 0.9359762
+
+[node name="Area2D" type="Area2D" parent="." unique_id=352963766]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=345599204]
+
+[node name="StructureInfoTooltipCanvasLayer" type="CanvasLayer" parent="." unique_id=1058094330]
+
+[node name="StructureInfoTooltipPanelContainer" type="PanelContainer" parent="StructureInfoTooltipCanvasLayer" unique_id=1752160121]
+offset_right = 345.0
+offset_bottom = 190.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer" unique_id=744335084]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ProductionVBoxContainer" type="VBoxContainer" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer" unique_id=1225128461]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ProductionLabel" type="Label" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/ProductionVBoxContainer" unique_id=2065308188]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Production:"
+
+[node name="ProductionItemList" type="ItemList" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/ProductionVBoxContainer" unique_id=343892922]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="NextTierVBoxContainer" type="VBoxContainer" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer" unique_id=22598974]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/NextTierVBoxContainer" unique_id=1836295050]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/NextTierVBoxContainer/HBoxContainer" unique_id=1275474321]
+layout_mode = 2
+text = "Next Tier:"
+
+[node name="NextTierTextureRect" type="TextureRect" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/NextTierVBoxContainer/HBoxContainer" unique_id=1885868413]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+stretch_mode = 4
+
+[node name="NextTierLabel" type="Label" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/NextTierVBoxContainer/HBoxContainer" unique_id=1193893915]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextTierItemList" type="ItemList" parent="StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/NextTierVBoxContainer" unique_id=1463825139]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

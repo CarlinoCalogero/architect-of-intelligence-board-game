@@ -92,6 +92,9 @@ func get_local_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 func is_local_player_playing() -> bool:
 	return current_player_index == local_player_index
 
+func is_player_local_player(player_index: int) -> bool:
+	return player_index == local_player_index
+
 # -- CURRENT PLAYER FUNCTIONS
 
 func get_current_player_color() -> PlayerColorResource:
