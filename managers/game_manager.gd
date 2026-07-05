@@ -19,7 +19,7 @@ signal set_close_button_disabled_requested(is_disabled: bool)
 enum GamePhase {
 	MAIN_MENU,
 	SETUP_TURN,
-	PLAYER_TURN
+	PLAYING
 }
 
 enum SetupTurnPhaseSubphases {
@@ -151,8 +151,8 @@ func _change_phase(new_phase: GamePhase) -> void:
 			_setup_turn_phase()
 			return
 			
-		GamePhase.PLAYER_TURN:
-			print("Waiting for player to act...")
+		GamePhase.PLAYING:
+			print("Starting game...")
 			# Unlock UI buttons so the player can click things.
 			# Notice how the code just STOPS here. It idles completely.
 			return
@@ -223,11 +223,8 @@ func _setup_turn_phase():
 		
 		SetupTurnPhaseSubphases.SETUP_COMPLETED:
 			print("Board setup successfully completed...")
+			_change_phase(GamePhase.PLAYING)
 			return
-		
-	# Deal cards, spawn pieces, etc.
-	# When finished, move to the next phase:
-	_change_phase(GamePhase.PLAYER_TURN)
 
 func _current_setup_turn_phase_city_building_subphases():
 	_setup_turn_phase_building_subphase([CITY_STRUCTURE_RESOURCE.name], CITY_STRUCTURE_RESOURCE)
