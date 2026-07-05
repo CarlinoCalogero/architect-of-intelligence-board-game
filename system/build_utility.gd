@@ -6,6 +6,8 @@ extends Control
 @onready var button: Button = $Button
 @onready var item_list: ItemList = $ItemList
 
+@export var cannot_build_on_resources_below_required: bool = true
+
 var last_built_item_index: int = -1
 var last_built_structure: StructureResource = null
 var current_buildable_structures: Dictionary[String, int]
@@ -20,6 +22,7 @@ func _ready():
 	GameManager.enable_all_buildable_structures.connect(_on_enable_all_buildable_structures)
 	GameManager.build_structure_requested.connect(_on_build_structure_requested)
 	GameManager.set_ui_button_disabled_requested.connect(_on_set_ui_button_disabled_requested)
+	GameManager.toggle_cannot_build_on_resources_below_required.connect(_on_toggle_cannot_build_on_resources_below_required)
 	
 	grid_placememt_system.structure_built.connect(_on_structure_built)
 	
@@ -49,6 +52,7 @@ func _change_buildings_color():
 
 func _toggle_structures_item_list(is_next_visible: bool):
 	item_list.visible = is_next_visible
+	_compute_buildable_structures_based_on_available_resources()
 
 func set_buildable_structure_subset(structure_keys: Array[String]):
 	for available_structure_key in current_buildable_structures:
@@ -105,6 +109,26 @@ func _on_player_changed(_new_player_index: int, player_color: PlayerColorResourc
 	grid_placememt_system.set_building_color(current_building_color)
 	_change_buildings_color()
 
+func _compute_buildable_structures_based_on_available_resources():
+	if not cannot_build_on_resources_below_required:
+		return
+	
+	var current_player_resources: Dictionary[String, float] = GameManager.get_current_player_resources()
+	
+	for item_index in range(item_list.item_count):
+		var structure: StructureResource = item_list.get_item_metadata(item_index)
+		var building_costs: Array[Transaction] = structure.building_cost
+		
+		var is_disabled: bool = false
+		var cost_index: int = 0
+		while not is_disabled and cost_index < building_costs.size() -1:
+			var cost: Transaction = building_costs[cost_index]
+			is_disabled = current_player_resources[cost.resource_type.name] < cost.amount
+			cost_index += 1
+		
+		
+		item_list.set_item_disabled(item_index, is_disabled)
+
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
 
@@ -112,7 +136,6 @@ func _on_enable_all_buildable_structures() -> void:
 	enable_all_buildable_structures()
 
 func _on_build_structure_requested(structure: StructureResource):
-	print("structure_type.name: [", structure.name, "]")
 	last_built_structure = structure
 	grid_placememt_system.place_random_building(structure.texture)
 
@@ -121,3 +144,6 @@ func _on_set_build_utility_disabled_requested(is_disabled: bool):
 
 func _on_set_ui_button_disabled_requested(is_disabled: bool):
 	_set_utility_disabled(is_disabled)
+
+func _on_toggle_cannot_build_on_resources_below_required(is_player_cannot_build_when_resources_are_below_required: bool) -> void:
+	cannot_build_on_resources_below_required = is_player_cannot_build_when_resources_are_below_required

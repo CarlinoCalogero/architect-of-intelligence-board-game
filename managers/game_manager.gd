@@ -13,6 +13,7 @@ signal knowledge_card_changed
 signal toggle_knowledge_card_desk_requested(is_visible: bool)
 signal set_knowledge_card_desk_close_button_disabled_requested(is_disabled: bool)
 signal set_ui_button_disabled_requested(is_disabled: bool)
+signal toggle_cannot_build_on_resources_below_required(is_player_cannot_build_when_resources_are_below_required: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var turn_manager: TurnManager = $TurnManager
@@ -178,10 +179,6 @@ func _change_phase(new_phase: GamePhase) -> void:
 			return
 
 func _setup_turn_phase():
-	# Remove later
-	cpu_player_wait_timer.start()
-	await cpu_player_wait_timer.timeout
-	# Remove later
 	
 	_compute_next_player_index()
 	
@@ -239,6 +236,7 @@ func _setup_turn_phase():
 		
 		SetupTurnPhaseSubphases.SETUP_COMPLETED:
 			print("Board setup successfully completed...")
+			emit_signal("toggle_cannot_build_on_resources_below_required", true)
 			_change_phase(GamePhase.PLAYING)
 			return
 
@@ -278,6 +276,12 @@ func new_game(number_of_players: int = 4):
 	var player_colors: Array[PlayerColorResource] = game_definition.get_player_colors()
 	game_state_manager.setup(player_colors, get_game_resources_list())
 	
+	# Remove later
+	cpu_player_wait_timer.start()
+	await cpu_player_wait_timer.timeout
+	# Remove later
+	
+	emit_signal("toggle_cannot_build_on_resources_below_required", false)
 	_change_phase(GamePhase.SETUP_TURN)
 
 func on_structure_built(structure: StructureResource, cell_position: Vector2i) -> bool:
