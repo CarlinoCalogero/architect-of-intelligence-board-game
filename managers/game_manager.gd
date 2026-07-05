@@ -11,6 +11,7 @@ signal push_notification_requested(message: String, display_time: float)
 signal hidden_dice_roll_requested(number_of_dice: int)
 signal knowledge_card_changed
 signal toggle_knowledge_card_utility_requested(is_visible: bool)
+signal set_close_button_disabled_requested(is_disabled: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -193,20 +194,31 @@ func _setup_turn_phase():
 		
 		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
 			var max_number_of_knowledge_cards: int = get_max_number_of_knowledge_cards()
+			var is_local_player: bool = current_player_index == local_player_index
+			
+			if is_local_player:
+					emit_signal("toggle_knowledge_card_utility_requested", true)
+					emit_signal("set_close_button_disabled_requested", true)
+			
 			for index in range(max_number_of_knowledge_cards):
-				var is_local_player: bool = current_player_index == local_player_index
 				if is_local_player:
-					if index == 0:
-						emit_signal("toggle_knowledge_card_utility_requested", true)
 					print("Drawing the knowledge card [", index, "] for the local player, please wait...")
 				else:
-					print("Drawing the knowledge card [", index, "] for player [", get_current_player_color().name, "], please wait...")
+					var notification_text: String = "Drawing the knowledge card [" + str(index + 1) + "] for player [" + get_current_player_color().name + "], please wait..."
+					emit_signal("push_notification_requested", notification_text)
 				
 				cpu_player_wait_timer.start()
 				await cpu_player_wait_timer.timeout
 				
 				draw_random_knowledge_card()
-				
+			
+			if is_local_player:
+				emit_signal("set_close_button_disabled_requested", false)
+			else:
+				var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
+				if is_last_player:
+					current_setup_turn_phase_subphases = SetupTurnPhaseSubphases.SETUP_COMPLETED
+				_setup_turn_phase()
 			return
 		
 		SetupTurnPhaseSubphases.SETUP_COMPLETED:
@@ -330,7 +342,4 @@ func on_knowledge_card_utility_closed():
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
 			SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
-				var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
-				if is_last_player:
-					current_setup_turn_phase_subphases = SetupTurnPhaseSubphases.SETUP_COMPLETED
 				_setup_turn_phase()

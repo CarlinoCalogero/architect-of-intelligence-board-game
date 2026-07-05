@@ -1,7 +1,6 @@
 class_name KnowledgeCardUtility
 extends Control
 
-var game_resource_indexes: Dictionary[String, int] = {}
 @onready var knowledge_card_components: Array[KnowledgeCardComponent] = [
 	$VBoxContainer/FirstRowHBoxContainer/TopLeftKnowledgeCardComponent, 
 	$VBoxContainer/FirstRowHBoxContainer/TopMiddleKnowledgeCardComponent, 
@@ -10,9 +9,14 @@ var game_resource_indexes: Dictionary[String, int] = {}
 	$VBoxContainer/SecondRowHBoxContainer/BottomRightKnowledgeCardComponent
 ]
 
+@onready var close_button: Button = $CloseButton
+
+
 func _ready():
 	GameManager.knowledge_card_changed.connect(_update_knowledge_cards)
 	GameManager.toggle_knowledge_card_utility_requested.connect(_toggle_visibility)
+	GameManager.set_close_button_disabled_requested.connect(_set_close_button_disabled)
+	
 	_populate_knowledge_card_components()
 	self.hide()
 
@@ -31,6 +35,9 @@ func _update_knowledge_cards():
 
 func _toggle_visibility(is_next_visible: bool):
 	self.visible = is_next_visible
+
+func _set_close_button_disabled(is_disabled: bool):
+	close_button.disabled = is_disabled
 
 func _on_close_button_pressed() -> void:
 	self.hide() # this is important here
