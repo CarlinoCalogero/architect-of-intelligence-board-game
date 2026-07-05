@@ -41,7 +41,7 @@ func _build_harvest_queue() -> void:
 			var buit_structure_data: BuiltData = current_type_structure_built_structures_list[buit_structure_data_index]
 			var structure: StructureResource = buit_structure_data.structure
 			for harvest_formula in structure.turn_production:
-				var harvest_action: HarvestAction = HarvestAction.new(structure, harvest_formula)
+				var harvest_action: HarvestAction = HarvestAction.new(buit_structure_data, harvest_formula)
 				# if harvest is not due to single structure but by the "sum" of the structures
 				# we only add the harvest action at the end
 				if harvest_formula.is_single_formula_for_all_structures_of_same_type:
@@ -55,14 +55,15 @@ func dice_rolled(rolls: Array[int]):
 		var harvest_action: HarvestAction = harvest_queue.pop_front()
 		var harvest_formula: GameResourceFormula = harvest_action.formula
 		var dice_sum: int = rolls.reduce(func(accum, number): return accum + number, 0)
-		var new_value: float = dice_sum
+		var new_value: float = harvest_formula.formula_sign * dice_sum
 		# if harvest is not due to single structure but by the "sum" of the structures
 		# we multiply here the resource
 		if harvest_formula.is_single_formula_for_all_structures_of_same_type:
 			var resource_type_key: String = harvest_formula.single_formula_for_all_structures_of_same_type_sum_multiplier_resource_type.name
 			new_value *= GameManager.get_current_player_resource_from_key(resource_type_key)
 		new_value *=  harvest_formula.multiplier_value
-		GameManager.update_current_player_resource(harvest_formula.resource_type, new_value)
+		var producting_structure_built_data: BuiltData = harvest_action.producting_structure_built_data
+		GameManager.update_current_player_resource(harvest_formula.resource_type, new_value, producting_structure_built_data)
 		
 		if not harvest_queue.is_empty():
 			_do_harvest_resource()

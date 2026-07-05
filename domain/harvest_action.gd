@@ -1,9 +1,9 @@
 class_name HarvestAction
 extends RefCounted
 
-var structure: StructureResource
+var producting_structure_built_data: BuiltData
 var formula: GameResourceFormula
 
-func _init(p_struct: StructureResource, p_form: GameResourceFormula):
-	structure = p_struct
-	formula = p_form
+func _init(new_producting_structure_built_data: BuiltData, new_formula: GameResourceFormula):
+	producting_structure_built_data = new_producting_structure_built_data
+	formula = new_formula

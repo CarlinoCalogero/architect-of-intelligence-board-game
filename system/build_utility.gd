@@ -82,8 +82,9 @@ func _on_structure_built(cell_position: Vector2i) -> void:
 		current_buildable_structures.erase(structure.name)
 	
 	# -- Handle construction earnings
+	var built_data: BuiltData = BuiltData.new(structure, cell_position, structure.bound_resource)
 	for on_build_earning: Transaction in structure.on_build_earnings:
-		GameManager.update_current_player_resource(on_build_earning.resource_type, on_build_earning.amount)
+		GameManager.update_current_player_resource(on_build_earning.resource_type, on_build_earning.amount, built_data)
 	
 	last_built_item_index = -1
 

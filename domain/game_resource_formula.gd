@@ -2,6 +2,7 @@ class_name GameResourceFormula
 extends Resource
 
 @export var resource_type: GameResource
+@export_enum("Positive:1", "Negative:-1") var formula_sign: int = 1
 @export var base_value: float
 @export var number_of_dice_to_roll: int
 @export var multiplier_value: float

@@ -50,12 +50,28 @@ is_single_formula_for_all_structures_of_same_type = true
 single_formula_for_all_structures_of_same_type_sum_multiplier_resource_type = ExtResource("5_rju2x")
 metadata/_custom_type_script = "uid://ck6fuemortsgr"
 
+[sub_resource type="Resource" id="Resource_xouvw"]
+script = ExtResource("7_rju2x")
+resource_type = ExtResource("5_rju2x")
+formula_sign = -1
+number_of_dice_to_roll = 1
+multiplier_value = 60000.0
+metadata/_custom_type_script = "uid://ck6fuemortsgr"
+
+[sub_resource type="Resource" id="Resource_hktns"]
+script = ExtResource("7_rju2x")
+resource_type = ExtResource("5_rju2x")
+number_of_dice_to_roll = 1
+multiplier_value = 120000.0
+metadata/_custom_type_script = "uid://ck6fuemortsgr"
+
 [resource]
 script = ExtResource("2_7rfim")
 name = "City"
 texture = ExtResource("5_i0ob3")
+bound_resource = ExtResource("5_rju2x")
 building_cost = Array[ExtResource("1_m5fsk")]([SubResource("Resource_rju2x"), SubResource("Resource_kfxy1"), SubResource("Resource_i0ob3")])
 on_build_earnings = Array[ExtResource("1_m5fsk")]([SubResource("Resource_tgxwc")])
 setup_phase_production = Array[ExtResource("7_rju2x")]([SubResource("Resource_xgv4e")])
-turn_production = Array[ExtResource("7_rju2x")]([SubResource("Resource_42laq")])
+turn_production = Array[ExtResource("7_rju2x")]([SubResource("Resource_42laq"), SubResource("Resource_xouvw"), SubResource("Resource_hktns")])
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"

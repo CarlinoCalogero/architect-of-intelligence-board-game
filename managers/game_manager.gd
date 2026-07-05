@@ -107,8 +107,8 @@ func get_current_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 func get_current_player_built_structure() -> Dictionary[String, Array]:
 	return game_state_manager.get_player_built_structures(current_player_index)
 
-func update_current_player_resource(game_resource: GameResource, value: float) -> void:
-	game_state_manager.update_player_resource(current_player_index, game_resource, value)
+func update_current_player_resource(game_resource: GameResource, value: float, producing_structure_built_data: BuiltData = null) -> float:
+	return game_state_manager.update_player_resource(current_player_index, game_resource, value, producing_structure_built_data)
 
 func add_current_player_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	return game_state_manager.add_built_structure(current_player_index, structure, cell)
@@ -306,7 +306,7 @@ func _on_current_game_resource_changed(game_resource: GameResource, new_value: f
 	var unit_of_measurement: String = str(game_resource.unit_of_measurement)
 	if unit_of_measurement.is_empty():
 		unit_of_measurement = game_resource.name
-	var notification_text: String = player_text + " earned " + str(new_value) + " " + unit_of_measurement
+	var notification_text: String = player_text + " now " + str(new_value) + " " + unit_of_measurement
 	emit_signal("push_notification_requested", notification_text)
 
 func on_dice_rolled(rolls: Array[int]):
@@ -323,7 +323,7 @@ func on_dice_rolled(rolls: Array[int]):
 func _on_dice_rolled_next_setup_turn_phase(rolls: Array[int], next_phase: SetupTurnPhaseSubphases):
 	var setup_phase_production_formula: GameResourceFormula = setup_phase_production_queue.pop_front()
 	var dice_sum: int = rolls.reduce(func(accum, number): return accum + number, 0)
-	var new_value: float = setup_phase_production_formula.base_value + (dice_sum * setup_phase_production_formula.multiplier_value)
+	var new_value: float = setup_phase_production_formula.formula_sign * (setup_phase_production_formula.base_value + (dice_sum * setup_phase_production_formula.multiplier_value))
 	update_current_player_resource(setup_phase_production_formula.resource_type, new_value)
 	
 	if not setup_phase_production_queue.is_empty():

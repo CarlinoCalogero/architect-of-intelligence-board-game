@@ -3,7 +3,7 @@ extends Resource
 
 var player_color: PlayerColorResource
 var player_resources: Dictionary[String, float]
-var built_structures: Dictionary[String, Array] = {} # Dictionary[String, Array[BuiltData]
+var built_structures: Dictionary[String, Array] = {} # Dictionary[String, Array[BuiltData]]
 var knowledge_cards: Array[KnowledgeCardResource]
 
 var last_built_structure_type: StructureResource
@@ -45,6 +45,17 @@ func get_setup_phase_production_earning_queue() -> Array[GameResourceFormula]:
 func get_knowledge_cards() -> Array[KnowledgeCardResource]:
 	return knowledge_cards
 
+func get_structure_at_cell_index(structure_type: String, cell_position: Vector2i) -> int:
+	if not built_structures.has(structure_type):
+		return -1
+	
+	var structures: Array = built_structures[structure_type]
+	for index in range(structures.size()):
+		var structure_built_data: BuiltData = structures[index]
+		if structure_built_data.cell_position == cell_position:
+			return index
+	return -1
+
 # -- UTILITY FUNCTIONS
 
 # If return is true player has built the maximum number of this type structure
@@ -52,6 +63,8 @@ func add_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	last_built_structure_type = structure
 	
 	var new_building_data = BuiltData.new(structure, cell)
+	if structure.bound_resource:
+		new_building_data.bounded_resource = structure.bound_resource
 	
 	if built_structures.has(structure.name):
 		built_structures[structure.name].append(new_building_data)
@@ -64,10 +77,21 @@ func add_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	
 	return false
 
-func update_game_resource(game_resource: GameResource, value: float) -> float:
+# producing_structure and producing_structure_cell_position are populated only if game resource to be
+# updated is due to structure production/effect
+func update_game_resource(game_resource: GameResource, value: float, producing_structure_built_data: BuiltData = null) -> float:
 	var resource_key: String = game_resource.name
 	var new_value = player_resources[resource_key] + value
 	player_resources[resource_key] = new_value
+	
+	if producing_structure_built_data:
+		var producing_structure: StructureResource = producing_structure_built_data.structure
+		if producing_structure.bound_resource and producing_structure.bound_resource.name == game_resource.name:
+			var producing_structure_type: String = producing_structure.name
+			var producing_structure_index: int = get_structure_at_cell_index(producing_structure_type, producing_structure_built_data.cell_position)
+			if producing_structure_index != -1:
+				built_structures[producing_structure_type][producing_structure_index].bounded_resource_amount += value
+	
 	return new_value
 
 func add_knowledge_card(knowledge_card: KnowledgeCardResource):

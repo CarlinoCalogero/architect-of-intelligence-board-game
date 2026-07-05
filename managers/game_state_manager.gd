@@ -35,9 +35,10 @@ func get_player_built_structures(player_index: int) -> Dictionary[String, Array]
 func get_player_setup_phase_production_earning_queue(player_index: int) -> Array[GameResourceFormula]:
 	return players[player_index].get_setup_phase_production_earning_queue()
 
-func update_player_resource(player_index: int, game_resource: GameResource, value: float) -> void:
-	var new_value: float = players[player_index].update_game_resource(game_resource, value)
+func update_player_resource(player_index: int, game_resource: GameResource, value: float, producing_structure_built_data: BuiltData = null) -> float:
+	var new_value: float = players[player_index].update_game_resource(game_resource, value, producing_structure_built_data)
 	emit_signal("current_game_resource_changed", game_resource, new_value)
+	return new_value
 
 func add_built_structure(player_index: int, structure: StructureResource, cell: Vector2i) -> bool:
 	return  players[player_index].add_built_structure(structure, cell)
