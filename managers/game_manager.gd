@@ -151,6 +151,17 @@ func draw_random_knowledge_card() -> void:
 	game_state_manager.add_player_knowledge_card(current_player_index, picked_card)
 	emit_signal("knowledge_card_changed")
 
+# GAME STATE FUNCTIONS
+
+func get_board_occupied_cells() -> Dictionary:
+	return game_state_manager.get_board_occupied_cells()
+
+func add_occupied_cell_to_board(cell_position: Vector2i, structure: Structure) -> void:
+	game_state_manager.add_occupied_cell_to_board(cell_position, structure)
+
+func is_board_cell_occupied(cell_position: Vector2i):
+	return game_state_manager.is_board_cell_occupied(cell_position)
+
 # GAME UI FUNCTIONS
 
 func disable_ui_buttons():

@@ -154,7 +154,7 @@ func _on_area_2d_mouse_exited() -> void:
 func _on_game_resource_changed(_game_resource: GameResource, _new_value: float) -> void:
 	_check_if_structure_can_be_upgraded()
 
-func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			print("Player clicked on structure: ", structure_resource.name)

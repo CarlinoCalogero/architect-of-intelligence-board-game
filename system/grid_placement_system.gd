@@ -26,7 +26,6 @@ var visual_offset: Vector2 = Vector2.ZERO
 
 var current_grid_pos: Vector2i
 var current_building_structure: StructureResource
-var occupied_cells: Dictionary = {}
 
 func _ready() -> void:
 	_reset()
@@ -131,7 +130,7 @@ func _place_building() -> void:
 
 	for offset in footprint:
 		var claim_pos = current_grid_pos + offset
-		occupied_cells[claim_pos] = structure_node
+		GameManager.add_occupied_cell_to_board(claim_pos, structure_node)
 	
 	_reset()
 	emit_signal("structure_built", current_grid_pos)
@@ -157,8 +156,8 @@ func _setup_building_texture(new_texture: Texture2D) -> void:
 func _is_footprint_clear(base_pos: Vector2i) -> bool:
 	for offset in footprint:
 		var check_pos = base_pos + offset
-		if occupied_cells.has(check_pos):
-			return false 
+		if GameManager.is_board_cell_occupied(check_pos):
+			return false
 	return true
 
 func _compute_placement_preview():

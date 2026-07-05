@@ -4,6 +4,7 @@ extends Node
 signal current_game_resource_changed(game_resource: GameResource, new_value: float)
 
 var players: Array = []
+var board_occupied_cells: Dictionary[Vector2i, Structure] = {}
 
 func setup(player_colors: Array[PlayerColorResource], game_resources_list: Array[GameResource]) -> void:
 	for player_color_index in range(player_colors.size()):
@@ -14,6 +15,15 @@ func setup(player_colors: Array[PlayerColorResource], game_resources_list: Array
 
 func get_number_of_players() -> int:
 	return players.size()
+
+func get_board_occupied_cells() -> Dictionary:
+	return board_occupied_cells
+
+func add_occupied_cell_to_board(cell_position: Vector2i, structure: Structure) -> void:
+	board_occupied_cells[cell_position] = structure
+
+func is_board_cell_occupied(cell_position: Vector2i):
+	return board_occupied_cells.has(cell_position)
 
 # -- PLAYER FUNCTIONS
 
