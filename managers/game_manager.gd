@@ -14,6 +14,7 @@ signal set_knowledge_card_desk_close_button_disabled_requested(is_disabled: bool
 signal set_ui_button_disabled_requested(is_disabled: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
+@onready var turn_manager: TurnManager = $TurnManager
 
 enum GamePhase {
 	MAIN_MENU,
@@ -86,6 +87,9 @@ func get_local_player_resources() -> Dictionary[String, float]:
 func get_local_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 	return game_state_manager.get_player_knowledge_cards(local_player_index)
 
+func is_local_player_playing() -> bool:
+	return current_player_index == local_player_index
+
 # -- CURRENT PLAYER FUNCTIONS
 
 func get_current_player_color() -> PlayerColorResource:
@@ -155,8 +159,7 @@ func _change_phase(new_phase: GamePhase) -> void:
 			
 		GamePhase.PLAYING:
 			print("Starting game...")
-			# Unlock UI buttons so the player can click things.
-			# Notice how the code just STOPS here. It idles completely.
+			turn_manager.start_game_session()
 			return
 
 func _setup_turn_phase():
@@ -188,10 +191,7 @@ func _setup_turn_phase():
 			if setup_phase_production_queue.is_empty():
 				setup_phase_production_queue = game_state_manager.get_player_setup_phase_production_earning_queue(current_player_index)
 			var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
-			if current_player_index == local_player_index:
-				emit_signal("dice_roll_requested", dice_amount)
-			else:
-				emit_signal("hidden_dice_roll_requested", dice_amount)
+			roll_dice(dice_amount)
 			return
 		
 		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
@@ -309,9 +309,12 @@ func on_dice_rolled(rolls: Array[int]):
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
 			SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
-				_on_dice_rollet_next_setup_turn_phase(rolls, SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW)
+				_on_dice_rolled_next_setup_turn_phase(rolls, SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW)
+	
+	if current_state == GamePhase.PLAYING:
+		turn_manager.dice_rolled(rolls)
 
-func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupTurnPhaseSubphases):
+func _on_dice_rolled_next_setup_turn_phase(rolls: Array[int], next_phase: SetupTurnPhaseSubphases):
 	var setup_phase_production_formula: GameResourceFormula = setup_phase_production_queue.pop_front()
 	var dice_sum: int = rolls.reduce(func(accum, number): return accum + number, 0)
 	var new_value: float = setup_phase_production_formula.base_value + (dice_sum * setup_phase_production_formula.multiplier_value)
@@ -319,10 +322,7 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 	
 	if not setup_phase_production_queue.is_empty():
 		var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
-		if current_player_index == local_player_index:
-			emit_signal("dice_roll_requested", dice_amount)
-		else:
-			emit_signal("hidden_dice_roll_requested", dice_amount)
+		roll_dice(dice_amount)
 		return # this is important here
 	
 	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
@@ -336,3 +336,9 @@ func on_knowledge_card_desk_closed():
 		match current_setup_turn_phase_subphases:
 			SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
 				_setup_turn_phase()
+
+func roll_dice(dice_amount: int):
+	if current_player_index == local_player_index:
+		emit_signal("dice_roll_requested", dice_amount)
+	else:
+		emit_signal("hidden_dice_roll_requested", dice_amount)

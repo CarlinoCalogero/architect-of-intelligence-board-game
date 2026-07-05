@@ -14,9 +14,17 @@ number_of_dice_to_roll = 2
 multiplier_value = 15.0
 metadata/_custom_type_script = "uid://ck6fuemortsgr"
 
+[sub_resource type="Resource" id="Resource_vnnqg"]
+script = ExtResource("3_vnnqg")
+resource_type = ExtResource("4_cwgep")
+number_of_dice_to_roll = 1
+multiplier_value = 100.0
+metadata/_custom_type_script = "uid://ck6fuemortsgr"
+
 [resource]
 script = ExtResource("2_c1d7v")
 name = "Water Treatment Plant"
 texture = ExtResource("3_c1d7v")
 setup_phase_production = Array[ExtResource("3_vnnqg")]([SubResource("Resource_xc5uj")])
+turn_production = Array[ExtResource("3_vnnqg")]([SubResource("Resource_vnnqg")])
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
