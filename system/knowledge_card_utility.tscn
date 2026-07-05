@@ -10,9 +10,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_mxnph")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2056701140]
+[node name="OpenKnowledgeCardsDeskButton" type="Button" parent="." unique_id=361143857]
+layout_mode = 0
+offset_left = 621.0
+offset_top = 600.0
+offset_right = 763.0
+offset_bottom = 631.0
+mouse_default_cursor_shape = 2
+text = "Knowledge Cards"
+
+[node name="KnowledgeCardsDesk" type="Control" parent="." unique_id=1065394280]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="KnowledgeCardsDesk" unique_id=2056701140]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +41,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.68235296)
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=506480487]
+[node name="VBoxContainer" type="VBoxContainer" parent="KnowledgeCardsDesk" unique_id=506480487]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,42 +50,42 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="FirstRowHBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1248666286]
+[node name="FirstRowHBoxContainer" type="HBoxContainer" parent="KnowledgeCardsDesk/VBoxContainer" unique_id=1248666286]
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 
-[node name="TopLeftKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=404188622 instance=ExtResource("2_p5ce3")]
+[node name="TopLeftKnowledgeCardComponent" parent="KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer" unique_id=404188622 instance=ExtResource("2_p5ce3")]
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 4
 
-[node name="TopMiddleKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=744318004 instance=ExtResource("2_p5ce3")]
+[node name="TopMiddleKnowledgeCardComponent" parent="KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer" unique_id=744318004 instance=ExtResource("2_p5ce3")]
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 4
 
-[node name="TopRightKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=153961975 instance=ExtResource("2_p5ce3")]
+[node name="TopRightKnowledgeCardComponent" parent="KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer" unique_id=153961975 instance=ExtResource("2_p5ce3")]
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 4
 
-[node name="SecondRowHBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=221608183]
+[node name="SecondRowHBoxContainer" type="HBoxContainer" parent="KnowledgeCardsDesk/VBoxContainer" unique_id=221608183]
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 
-[node name="BottomLeftKnowledgeCardComponent" parent="VBoxContainer/SecondRowHBoxContainer" unique_id=1634492637 instance=ExtResource("2_p5ce3")]
+[node name="BottomLeftKnowledgeCardComponent" parent="KnowledgeCardsDesk/VBoxContainer/SecondRowHBoxContainer" unique_id=1634492637 instance=ExtResource("2_p5ce3")]
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 4
 
-[node name="BottomRightKnowledgeCardComponent" parent="VBoxContainer/SecondRowHBoxContainer" unique_id=867050662 instance=ExtResource("2_p5ce3")]
+[node name="BottomRightKnowledgeCardComponent" parent="KnowledgeCardsDesk/VBoxContainer/SecondRowHBoxContainer" unique_id=867050662 instance=ExtResource("2_p5ce3")]
 layout_mode = 2
 expand_mode = 2
 stretch_mode = 4
 
-[node name="CloseButton" type="Button" parent="." unique_id=1033900605]
+[node name="KnowledgeCardsDeskCloseButton" type="Button" parent="KnowledgeCardsDesk" unique_id=1033900605]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -76,4 +95,5 @@ offset_bottom = 31.0
 grow_horizontal = 0
 text = "Close"
 
-[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="OpenKnowledgeCardsDeskButton" to="." method="_on_open_knowledge_cards_desk_button_pressed"]
+[connection signal="pressed" from="KnowledgeCardsDesk/KnowledgeCardsDeskCloseButton" to="." method="_on_close_button_pressed"]

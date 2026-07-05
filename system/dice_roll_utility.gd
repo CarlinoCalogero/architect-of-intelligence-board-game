@@ -10,6 +10,7 @@ func _ready() -> void:
 	
 	GameManager.dice_roll_requested.connect(_on_dice_roll_requested)
 	GameManager.hidden_dice_roll_requested.connect(_on_hidden_dice_roll_requested)
+	GameManager.set_ui_button_disabled_requested.connect(_on_set_ui_button_disabled_requested)
 
 func roll_dice(number_of_dice: int) -> Array[int]:
 	var results: Array[int] = []
@@ -29,6 +30,9 @@ func _do_roll():
 	var rolls: Array[int] = roll_dice(number_of_dice_to_roll)
 	GameManager.on_dice_rolled(rolls)
 
+func _set_utility_disabled(is_disabled: bool):
+	self.visible = is_disabled
+
 func _on_button_pressed() -> void:
 	self.hide() # this is important here
 	_do_roll()
@@ -39,3 +43,6 @@ func _on_dice_roll_requested(number_of_dice: int):
 func _on_hidden_dice_roll_requested(number_of_dice: int):
 	number_of_dice_to_roll = number_of_dice
 	_do_roll()
+
+func _on_set_ui_button_disabled_requested(is_disabled: bool):
+	_set_utility_disabled(is_disabled)

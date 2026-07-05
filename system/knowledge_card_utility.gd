@@ -1,24 +1,27 @@
 class_name KnowledgeCardUtility
 extends Control
 
+@onready var open_knowledge_cards_desk_button: Button = $OpenKnowledgeCardsDeskButton
+@onready var knowledge_cards_desk: Control = $KnowledgeCardsDesk
 @onready var knowledge_card_components: Array[KnowledgeCardComponent] = [
-	$VBoxContainer/FirstRowHBoxContainer/TopLeftKnowledgeCardComponent, 
-	$VBoxContainer/FirstRowHBoxContainer/TopMiddleKnowledgeCardComponent, 
-	$VBoxContainer/FirstRowHBoxContainer/TopRightKnowledgeCardComponent, 
-	$VBoxContainer/SecondRowHBoxContainer/BottomLeftKnowledgeCardComponent, 
-	$VBoxContainer/SecondRowHBoxContainer/BottomRightKnowledgeCardComponent
+	$KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer/TopLeftKnowledgeCardComponent, 
+	$KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer/TopMiddleKnowledgeCardComponent, 
+	$KnowledgeCardsDesk/VBoxContainer/FirstRowHBoxContainer/TopRightKnowledgeCardComponent, 
+	$KnowledgeCardsDesk/VBoxContainer/SecondRowHBoxContainer/BottomLeftKnowledgeCardComponent, 
+	$KnowledgeCardsDesk/VBoxContainer/SecondRowHBoxContainer/BottomRightKnowledgeCardComponent
 ]
 
-@onready var close_button: Button = $CloseButton
+@onready var knowledge_cards_desk_close_button: Button = $KnowledgeCardsDesk/KnowledgeCardsDeskCloseButton
 
 
 func _ready():
 	GameManager.knowledge_card_changed.connect(_update_knowledge_cards)
-	GameManager.toggle_knowledge_card_utility_requested.connect(_toggle_visibility)
-	GameManager.set_close_button_disabled_requested.connect(_set_close_button_disabled)
+	GameManager.toggle_knowledge_card_desk_requested.connect(_toggle_knowledge_cards_desk_visibility)
+	GameManager.set_knowledge_card_desk_close_button_disabled_requested.connect(_set_knowledge_card_desk_close_button_disabled)
+	GameManager.set_ui_button_disabled_requested.connect(_on_set_ui_button_disabled_requested)
 	
 	_populate_knowledge_card_components()
-	self.hide()
+	_set_utility_disabled(true)
 
 func _populate_knowledge_card_components():
 	var player_knowledge_cards: Array[KnowledgeCardResource] = GameManager.get_local_player_knowledge_cards()
@@ -33,12 +36,26 @@ func _populate_knowledge_card_components():
 func _update_knowledge_cards():
 	_populate_knowledge_card_components()
 
-func _toggle_visibility(is_next_visible: bool):
-	self.visible = is_next_visible
+func _set_utility_disabled(is_disabled: bool):
+	_toggle_knowledge_cards_desk_visibility(not is_disabled)
+	open_knowledge_cards_desk_button.disabled = is_disabled
 
-func _set_close_button_disabled(is_disabled: bool):
-	close_button.disabled = is_disabled
+func _set_knowledge_card_desk_close_button_disabled(is_disabled: bool):
+	knowledge_cards_desk_close_button.disabled = is_disabled
+
+func _toggle_knowledge_cards_desk_visibility(is_next_visible: bool):
+	knowledge_cards_desk.visible = is_next_visible
+	knowledge_cards_desk_close_button.visible = is_next_visible
+	_set_knowledge_card_desk_close_button_disabled(not is_next_visible)
+	
+	open_knowledge_cards_desk_button.visible = not is_next_visible
 
 func _on_close_button_pressed() -> void:
-	self.hide() # this is important here
-	GameManager.on_knowledge_card_utility_closed()
+	_toggle_knowledge_cards_desk_visibility(false) # this is important here
+	GameManager.on_knowledge_card_desk_closed()
+
+func _on_open_knowledge_cards_desk_button_pressed() -> void:
+	_toggle_knowledge_cards_desk_visibility(true)
+
+func _on_set_ui_button_disabled_requested(is_disabled: bool):
+	_set_utility_disabled(is_disabled)

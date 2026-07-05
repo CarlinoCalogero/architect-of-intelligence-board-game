@@ -14,15 +14,15 @@ func _ready():
 	assert(grid_placememt_system, "No active placement system")
 	
 	GameManager.player_changed.connect(_on_player_changed)
-	GameManager.local_player_turn_started.connect(_on_local_player_turn_started)
-	GameManager.local_player_turn_ended.connect(_on_local_player_turn_ended)
+	GameManager.set_build_utility_disabled_requested.connect(_on_set_build_utility_disabled_requested)
 	GameManager.buidable_structure_disabled.connect(_on_buidable_structure_disabled)
 	GameManager.build_structure_requested.connect(_on_build_structure_requested)
+	GameManager.set_ui_button_disabled_requested.connect(_on_set_ui_button_disabled_requested)
 	
 	grid_placememt_system.structure_built.connect(_on_structure_built)
 	
 	_populate_item_list()
-	_on_local_player_turn_ended()
+	_set_utility_disabled(true)
 
 # -- UTILITY
 
@@ -45,8 +45,8 @@ func _change_buildings_color():
 	for i in range(item_list.item_count):
 		item_list.set_item_icon_modulate(i, current_building_color)
 
-func toggle_structures_item_list():
-	item_list.visible = not item_list.visible
+func _toggle_structures_item_list(is_next_visible: bool):
+	item_list.visible = is_next_visible
 
 func set_buildable_structure_subset(structure_keys: Array[String]):
 	for available_structure_key in current_buildable_structures:
@@ -55,8 +55,14 @@ func set_buildable_structure_subset(structure_keys: Array[String]):
 func _reset():
 	last_built_item_index = -1
 
+func _set_utility_disabled(is_disabled: bool):
+	# Only close if we need to disable, if we enable do not show it
+	if is_disabled:
+		_toggle_structures_item_list(not is_disabled)
+	button.disabled = is_disabled
+
 func _on_button_pressed() -> void:
-	toggle_structures_item_list()
+	_toggle_structures_item_list(not item_list.visible)
 
 func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
 	last_built_item_index = index
@@ -87,13 +93,6 @@ func _on_player_changed(_new_player_index: int, player_color: PlayerColorResourc
 	grid_placememt_system.set_building_color(current_building_color)
 	_change_buildings_color()
 
-func _on_local_player_turn_started():
-	button.disabled = false
-
-func _on_local_player_turn_ended():
-	item_list.hide()
-	button.disabled = true
-
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
 
@@ -103,3 +102,9 @@ func _on_build_structure_requested(_player_index: int, structure_type: Structure
 		return
 	last_built_item_index = structure_type_index
 	grid_placememt_system.place_random_building(structure_type.texture)
+
+func _on_set_build_utility_disabled_requested(is_disabled: bool):
+	_set_utility_disabled(is_disabled)
+
+func _on_set_ui_button_disabled_requested(is_disabled: bool):
+	_set_utility_disabled(is_disabled)

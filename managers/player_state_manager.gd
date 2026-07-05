@@ -3,7 +3,7 @@ extends Resource
 
 var player_color: PlayerColorResource
 var player_resources: Dictionary[String, float]
-var built_structures: Dictionary[String, Array] = {}
+var built_structures: Dictionary[String, Array] = {} # Dictionary[String, Array[BuiltData]
 var knowledge_cards: Array[KnowledgeCardResource]
 
 var last_built_structure_type: StructureResource

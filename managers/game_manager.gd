@@ -1,8 +1,7 @@
 extends Node
 
 signal player_changed(new_player_index: int, player_color: PlayerColorResource)
-signal local_player_turn_started
-signal local_player_turn_ended
+signal set_build_utility_disabled_requested(is_disabled: bool)
 signal buidable_structure_disabled(structure_keys: Array[String])
 signal game_resource_changed(game_resource: GameResource, new_value: float)
 signal build_structure_requested(player_index: int, structure_type: StructureResource)
@@ -10,8 +9,9 @@ signal dice_roll_requested(number_of_dice: int)
 signal push_notification_requested(message: String, display_time: float)
 signal hidden_dice_roll_requested(number_of_dice: int)
 signal knowledge_card_changed
-signal toggle_knowledge_card_utility_requested(is_visible: bool)
-signal set_close_button_disabled_requested(is_disabled: bool)
+signal toggle_knowledge_card_desk_requested(is_visible: bool)
+signal set_knowledge_card_desk_close_button_disabled_requested(is_disabled: bool)
+signal set_ui_button_disabled_requested(is_disabled: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -97,6 +97,9 @@ func get_current_player_resources() -> Dictionary[String, float]:
 
 func get_current_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 	return game_state_manager.get_player_knowledge_cards(current_player_index)
+
+func get_current_player_built_structure() -> Dictionary[String, Array]:
+	return game_state_manager.get_player_built_structures(current_player_index)
 
 func update_current_player_resource(game_resource: GameResource, value: float) -> void:
 	game_state_manager.update_player_resource(current_player_index, game_resource, value)
@@ -197,8 +200,8 @@ func _setup_turn_phase():
 			var is_local_player: bool = current_player_index == local_player_index
 			
 			if is_local_player:
-					emit_signal("toggle_knowledge_card_utility_requested", true)
-					emit_signal("set_close_button_disabled_requested", true)
+					emit_signal("toggle_knowledge_card_desk_requested", true)
+					emit_signal("set_knowledge_card_desk_close_button_disabled_requested", true)
 			
 			for index in range(max_number_of_knowledge_cards):
 				if is_local_player:
@@ -213,7 +216,7 @@ func _setup_turn_phase():
 				draw_random_knowledge_card()
 			
 			if is_local_player:
-				emit_signal("set_close_button_disabled_requested", false)
+				emit_signal("set_knowledge_card_desk_close_button_disabled_requested", false)
 			else:
 				var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
 				if is_last_player:
@@ -246,7 +249,7 @@ func _setup_turn_phase_building_subphase(whitelisted_structures: Array[String], 
 	if current_player_index == local_player_index:
 		print("Waiting for local player to build a [", text_log, "]...")
 		emit_signal("buidable_structure_disabled", whitelisted_structures)
-		emit_signal("local_player_turn_started")
+		emit_signal("set_build_utility_disabled_requested", false)
 	else:
 		print("[", get_current_player_color().name, "] is placing a  [", text_log, "], please wait...")
 		cpu_player_manager.cpu_player_builds_structure(current_player_index, cpu_player_structure_resource_to_be_built)
@@ -287,7 +290,7 @@ func on_structure_built(structure: StructureResource, cell_position: Vector2i):
 
 func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphases):
 	if current_player_index == local_player_index:
-		emit_signal("local_player_turn_ended")
+		emit_signal("set_build_utility_disabled_requested", true)
 	elif current_player_index == game_state_manager.get_number_of_players() - 1:
 		current_setup_turn_phase_subphases = next_phase
 	_setup_turn_phase()
@@ -335,7 +338,7 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 func _on_cpu_player_manager_roll_dice_requested(_player_index: int, dice_amount: int) -> void:
 	emit_signal("hidden_dice_roll_requested", dice_amount)
 
-func on_knowledge_card_utility_closed():
+func on_knowledge_card_desk_closed():
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
 			SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
