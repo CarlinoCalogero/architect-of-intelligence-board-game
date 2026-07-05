@@ -8,3 +8,4 @@ extends Resource
 @export var building_cost: Array[Transaction]
 @export var on_build_earnings: Array[Transaction]
 @export var setup_phase_production: Array[GameResourceFormula]
+@export var turn_production: Array[GameResourceFormula]

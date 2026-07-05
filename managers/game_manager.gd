@@ -4,7 +4,7 @@ signal player_changed(new_player_index: int, player_color: PlayerColorResource)
 signal set_build_utility_disabled_requested(is_disabled: bool)
 signal buidable_structure_disabled(structure_keys: Array[String])
 signal game_resource_changed(game_resource: GameResource, new_value: float)
-signal build_structure_requested(player_index: int, structure_type: StructureResource)
+signal build_structure_requested(structure_type: StructureResource)
 signal dice_roll_requested(number_of_dice: int)
 signal push_notification_requested(message: String, display_time: float)
 signal hidden_dice_roll_requested(number_of_dice: int)
@@ -14,7 +14,6 @@ signal set_knowledge_card_desk_close_button_disabled_requested(is_disabled: bool
 signal set_ui_button_disabled_requested(is_disabled: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
-@onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
 
 enum GamePhase {
 	MAIN_MENU,
@@ -192,7 +191,7 @@ func _setup_turn_phase():
 			if current_player_index == local_player_index:
 				emit_signal("dice_roll_requested", dice_amount)
 			else:
-				cpu_player_manager.cpu_player_rolls_dice(current_player_index, dice_amount)
+				emit_signal("hidden_dice_roll_requested", dice_amount)
 			return
 		
 		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
@@ -252,7 +251,7 @@ func _setup_turn_phase_building_subphase(whitelisted_structures: Array[String], 
 		emit_signal("set_build_utility_disabled_requested", false)
 	else:
 		print("[", get_current_player_color().name, "] is placing a  [", text_log, "], please wait...")
-		cpu_player_manager.cpu_player_builds_structure(current_player_index, cpu_player_structure_resource_to_be_built)
+		emit_signal("build_structure_requested", cpu_player_structure_resource_to_be_built)
 
 func new_game(number_of_players: int = 4):
 	if number_of_players > get_max_number_of_players():
@@ -304,9 +303,6 @@ func _on_current_game_resource_changed(game_resource: GameResource, new_value: f
 	var notification_text: String = player_text + " earned " + str(new_value) + " " + str(game_resource.unit_of_measurement)
 	emit_signal("push_notification_requested", notification_text)
 
-func _on_cpu_player_manager_build_structure_requested(player_index: int, structure_type: StructureResource) -> void:
-	emit_signal("build_structure_requested", player_index, structure_type)
-
 func on_dice_rolled(rolls: Array[int]):
 	emit_signal("push_notification_requested", "Rolled: " + str(rolls))
 	
@@ -326,7 +322,7 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 		if current_player_index == local_player_index:
 			emit_signal("dice_roll_requested", dice_amount)
 		else:
-			cpu_player_manager.cpu_player_rolls_dice(current_player_index, dice_amount)
+			emit_signal("hidden_dice_roll_requested", dice_amount)
 		return # this is important here
 	
 	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
@@ -334,9 +330,6 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 		current_setup_turn_phase_subphases = next_phase
 	
 	_setup_turn_phase()
-
-func _on_cpu_player_manager_roll_dice_requested(_player_index: int, dice_amount: int) -> void:
-	emit_signal("hidden_dice_roll_requested", dice_amount)
 
 func on_knowledge_card_desk_closed():
 	if current_state == GamePhase.SETUP_TURN:

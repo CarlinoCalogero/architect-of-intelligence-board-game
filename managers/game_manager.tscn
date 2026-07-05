@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://3uvuhay7pg1t"]
 
 [ext_resource type="Script" uid="uid://dntsyfwpldtvd" path="res://managers/game_manager.gd" id="1_atyjh"]
-[ext_resource type="PackedScene" uid="uid://bgtuaal65u53c" path="res://managers/cpu_player_manager.tscn" id="2_8647g"]
 [ext_resource type="PackedScene" uid="uid://cyqdrtaoegabj" path="res://managers/turn_manager.tscn" id="3_n15wl"]
 
 [node name="GameManager" type="Node" unique_id=248288835]
@@ -9,9 +8,4 @@ script = ExtResource("1_atyjh")
 
 [node name="CPUPlayerWaitTimer" type="Timer" parent="." unique_id=169772672]
 
-[node name="CPUPlayerManager" parent="." unique_id=66729122 instance=ExtResource("2_8647g")]
-
 [node name="TurnManager" parent="." unique_id=1209846075 instance=ExtResource("3_n15wl")]
-
-[connection signal="build_structure_requested" from="CPUPlayerManager" to="." method="_on_cpu_player_manager_build_structure_requested"]
-[connection signal="roll_dice_requested" from="CPUPlayerManager" to="." method="_on_cpu_player_manager_roll_dice_requested"]

@@ -96,7 +96,7 @@ func _on_player_changed(_new_player_index: int, player_color: PlayerColorResourc
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
 
-func _on_build_structure_requested(_player_index: int, structure_type: StructureResource):
+func _on_build_structure_requested(structure_type: StructureResource):
 	var structure_type_index: int = _find_structure_item_list_index(structure_type)
 	if structure_type_index == -1:
 		return
