@@ -81,6 +81,7 @@ func add_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 # updated is due to structure production/effect
 func update_game_resource(game_resource: GameResource, value: float, producing_structure_built_data: BuiltData = null) -> float:
 	var resource_key: String = game_resource.name
+	print("Game Resource Update | resource_key: [", resource_key, "], current_value: [", player_resources[resource_key],"], amount: [", value,"]")
 	var new_value = player_resources[resource_key] + value
 	player_resources[resource_key] = new_value
 	

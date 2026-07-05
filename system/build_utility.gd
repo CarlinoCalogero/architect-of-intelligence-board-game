@@ -102,6 +102,11 @@ func _on_structure_built(cell_position: Vector2i) -> void:
 	var built_data: BuiltData = BuiltData.new(structure, cell_position, structure.bound_resource)
 	for on_build_earning: Transaction in structure.on_build_earnings:
 		GameManager.update_current_player_resource(on_build_earning.resource_type, on_build_earning.amount, built_data)
+	
+	# -- Handle construction cost
+	if cannot_build_on_resources_below_required:
+		for building_cost: Transaction in structure.building_cost:
+			GameManager.update_current_player_resource(building_cost.resource_type, -building_cost.amount, built_data)
 
 func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
 	current_building_color = player_color.color
@@ -120,12 +125,15 @@ func _compute_buildable_structures_based_on_available_resources():
 		var building_costs: Array[Transaction] = structure.building_cost
 		
 		var is_disabled: bool = false
-		var cost_index: int = 0
-		while not is_disabled and cost_index < building_costs.size() -1:
-			var cost: Transaction = building_costs[cost_index]
-			is_disabled = current_player_resources[cost.resource_type.name] < cost.amount
-			cost_index += 1
+		for cost in building_costs:
+			var resource_name: String = cost.resource_type.name
+			
+			if current_player_resources[resource_name] < cost.amount:
+				is_disabled = true
+				break # The player can't afford this, STOP checking the other costs!
 		
+		print("Build List Update | current player resources: ", current_player_resources)
+		print("Build List Update | structure: [", structure.name, "], can be built: [", is_disabled,"]")
 		
 		item_list.set_item_disabled(item_index, is_disabled)
 

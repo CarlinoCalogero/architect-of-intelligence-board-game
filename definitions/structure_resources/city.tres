@@ -24,7 +24,7 @@ metadata/_custom_type_script = "uid://wmvrr6eojje1"
 [sub_resource type="Resource" id="Resource_i0ob3"]
 script = ExtResource("1_m5fsk")
 resource_type = ExtResource("4_lodwt")
-amount = 3000000000.0
+amount = 300000000.0
 metadata/_custom_type_script = "uid://wmvrr6eojje1"
 
 [sub_resource type="Resource" id="Resource_tgxwc"]
