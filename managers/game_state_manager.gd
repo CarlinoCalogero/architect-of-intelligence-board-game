@@ -23,6 +23,9 @@ func get_player_color(player_index: int) -> PlayerColorResource:
 func get_player_resources(player_index: int) -> Dictionary[String, float]:
 	return players[player_index].get_game_resources()
 
+func get_player_resources_from_key(player_index: int, resource_key: String) -> float:
+	return players[player_index].get_game_resources_from_key(resource_key)
+
 func get_player_last_built_structure_type(player_index: int) -> StructureResource:
 	return players[player_index].get_last_built_structure_type()
 

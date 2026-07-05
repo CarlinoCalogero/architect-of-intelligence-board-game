@@ -22,6 +22,11 @@ func get_color() -> PlayerColorResource:
 func get_game_resources() -> Dictionary[String, float]:
 	return player_resources
 
+func get_game_resources_from_key(resource_key: String) -> float:
+	if not player_resources.has(resource_key):
+		return 0.0
+	return player_resources[resource_key]
+
 func get_last_built_structure_type() -> StructureResource:
 	return last_built_structure_type
 

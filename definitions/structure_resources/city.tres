@@ -46,6 +46,8 @@ script = ExtResource("7_rju2x")
 resource_type = ExtResource("4_lodwt")
 number_of_dice_to_roll = 2
 multiplier_value = 10.0
+is_single_formula_for_all_structures_of_same_type = true
+single_formula_for_all_structures_of_same_type_sum_multiplier_resource_type = ExtResource("5_rju2x")
 metadata/_custom_type_script = "uid://ck6fuemortsgr"
 
 [resource]

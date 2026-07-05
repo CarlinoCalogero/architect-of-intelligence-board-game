@@ -98,6 +98,9 @@ func get_current_player_color() -> PlayerColorResource:
 func get_current_player_resources() -> Dictionary[String, float]:
 	return game_state_manager.get_player_resources(current_player_index)
 
+func get_current_player_resource_from_key(resource_key: String) -> float:
+	return game_state_manager.get_player_resources_from_key(current_player_index, resource_key)
+
 func get_current_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 	return game_state_manager.get_player_knowledge_cards(current_player_index)
 
@@ -300,7 +303,10 @@ func _on_current_game_resource_changed(game_resource: GameResource, new_value: f
 	if local_player_index != current_player_index:
 		var player_color: PlayerColorResource = game_state_manager.get_player_color(current_player_index)
 		player_text = str(player_color.name) + " has"
-	var notification_text: String = player_text + " earned " + str(new_value) + " " + str(game_resource.unit_of_measurement)
+	var unit_of_measurement: String = str(game_resource.unit_of_measurement)
+	if unit_of_measurement.is_empty():
+		unit_of_measurement = game_resource.name
+	var notification_text: String = player_text + " earned " + str(new_value) + " " + unit_of_measurement
 	emit_signal("push_notification_requested", notification_text)
 
 func on_dice_rolled(rolls: Array[int]):
