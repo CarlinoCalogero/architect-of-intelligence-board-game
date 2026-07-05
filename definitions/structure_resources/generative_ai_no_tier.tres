@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ck6fuemortsgr" path="res://domain/game_resource_formula.gd" id="3_ehobh"]
 [ext_resource type="Texture2D" uid="uid://c7ytwllm1dwyq" path="res://sprites/meeples/generative_ai_no_tier.png" id="3_lahfj"]
 [ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="4_8dckm"]
+[ext_resource type="Texture2D" uid="uid://bo0lj7mdv2grj" path="res://sprites/meeples/generative_ai_tier_1.png" id="7_bec3n"]
 [ext_resource type="Texture2D" uid="uid://begfqnpnoubqy" path="res://sprites/meeples/generative_ai_base_tier.png" id="7_jmrt5"]
 
 [sub_resource type="Resource" id="Resource_caktq"]
@@ -27,11 +28,18 @@ resource_type = ExtResource("4_8dckm")
 amount = 100000000.0
 metadata/_custom_type_script = "uid://wmvrr6eojje1"
 
+[sub_resource type="Resource" id="Resource_8dckm"]
+script = ExtResource("2_lahfj")
+name = "Generative AI (Tier 1)"
+texture = ExtResource("7_bec3n")
+metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
+
 [sub_resource type="Resource" id="Resource_i817q"]
 script = ExtResource("2_lahfj")
 name = "Generative AI (Base Tier)"
 texture = ExtResource("7_jmrt5")
 building_cost = Array[ExtResource("1_8pojp")]([SubResource("Resource_caktq"), SubResource("Resource_82hx7"), SubResource("Resource_7xppa")])
+next_tier = SubResource("Resource_8dckm")
 metadata/_custom_type_script = "uid://dsgv5s4ki0om6"
 
 [resource]

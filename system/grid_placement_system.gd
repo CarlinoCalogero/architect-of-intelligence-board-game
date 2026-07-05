@@ -123,6 +123,7 @@ func _place_building() -> void:
 	var structure_node: Structure = STRUCTURE_RESOURCE.instantiate()
 	structure_node.global_position = ground_tile_map_layer.map_to_local(current_grid_pos) + visual_offset
 	built_structures.add_child(structure_node)
+	structure_node.tile_size = ground_tile_map_layer.tile_set.tile_size
 	structure_node.structure_resource = current_building_structure
 	structure_node.cell_position = current_grid_pos
 	structure_node.player_owner_index = player_owner_index

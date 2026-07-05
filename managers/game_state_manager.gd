@@ -25,6 +25,10 @@ func add_occupied_cell_to_board(cell_position: Vector2i, structure: Structure) -
 func is_board_cell_occupied(cell_position: Vector2i):
 	return board_occupied_cells.has(cell_position)
 
+func remove_occupied_cell_from_board(cell_position: Vector2i) -> void:
+	if board_occupied_cells.has(cell_position):
+		board_occupied_cells.erase(cell_position)
+
 # -- PLAYER FUNCTIONS
 
 func get_player_color(player_index: int) -> PlayerColorResource:

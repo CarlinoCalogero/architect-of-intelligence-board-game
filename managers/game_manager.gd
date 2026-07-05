@@ -162,6 +162,9 @@ func add_occupied_cell_to_board(cell_position: Vector2i, structure: Structure) -
 func is_board_cell_occupied(cell_position: Vector2i):
 	return game_state_manager.is_board_cell_occupied(cell_position)
 
+func remove_occupied_cell_from_board(cell_position: Vector2i) -> void:
+	game_state_manager.remove_occupied_cell_from_board(cell_position)
+
 # GAME UI FUNCTIONS
 
 func disable_ui_buttons():
