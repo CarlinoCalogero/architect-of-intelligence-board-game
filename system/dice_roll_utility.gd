@@ -9,12 +9,7 @@ func _ready() -> void:
 	self.hide()
 	
 	GameManager.dice_roll_requested.connect(_on_dice_roll_requested)
-
-func roll(number_of_dice: int):
-	number_of_dice_to_roll = number_of_dice
-	button.text = "Click to roll " + str(number_of_dice) + " dice!"
-	print("marco")
-	self.show()
+	GameManager.hidden_dice_roll_requested.connect(_on_hidden_dice_roll_requested)
 
 func roll_dice(number_of_dice: int) -> Array[int]:
 	var results: Array[int] = []
@@ -25,14 +20,22 @@ func roll_dice(number_of_dice: int) -> Array[int]:
 	
 	return results
 
+func _roll(number_of_dice: int):
+	number_of_dice_to_roll = number_of_dice
+	button.text = "Click to roll " + str(number_of_dice) + " dice!"
+	self.show()
+
+func _do_roll():
+	var rolls: Array[int] = roll_dice(number_of_dice_to_roll)
+	GameManager.on_dice_rolled(rolls)
+
 func _on_button_pressed() -> void:
-	print("Button was pressed!")
-	self.hide()
-	_on_dice_rolled(roll_dice(number_of_dice_to_roll))
+	self.hide() # this is important here
+	_do_roll()
 
 func _on_dice_roll_requested(number_of_dice: int):
-	print("pecora")
-	roll(number_of_dice)
+	_roll(number_of_dice)
 
-func _on_dice_rolled(rolls: Array[int]):
-	GameManager.on_dice_rolled(rolls)
+func _on_hidden_dice_roll_requested(number_of_dice: int):
+	number_of_dice_to_roll = number_of_dice
+	_do_roll()

@@ -8,6 +8,7 @@ signal game_resource_changed(game_resource_key: String, new_value: float)
 signal build_structure_requested(player_index: int, structure_type: StructureResource)
 signal dice_roll_requested(number_of_dice: int)
 signal push_notification_requested(message: String, display_time: float)
+signal hidden_dice_roll_requested(number_of_dice: int)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -135,7 +136,14 @@ func _setup_turn_phase():
 		SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
 			if setup_phase_production_queue.is_empty():
 				setup_phase_production_queue = game_state_manager.get_player_setup_phase_production_earning_queue(current_player_index)
-			emit_signal("dice_roll_requested", setup_phase_production_queue.front().number_of_dice_to_roll)
+			var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
+			if current_player_index == local_player_index:
+				emit_signal("dice_roll_requested", dice_amount)
+			else:
+				emit_signal("hidden_dice_roll_requested", dice_amount)
+			return
+		
+		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
 			return
 		
 	# Deal cards, spawn pieces, etc.
@@ -234,16 +242,17 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 	var dice_sum: int = rolls.reduce(func(accum, number): return accum + number, 0)
 	var new_value: float = setup_phase_production_formula.base_value + (dice_sum * setup_phase_production_formula.multiplier_value)
 	update_current_player_resource(setup_phase_production_formula.resource_type, new_value)
-	print("bua")
-	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
 	
+	if not setup_phase_production_queue.is_empty():
+		var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
+		if current_player_index == local_player_index:
+			emit_signal("dice_roll_requested", dice_amount)
+		else:
+			emit_signal("hidden_dice_roll_requested", dice_amount)
+		return # this is important here
+	
+	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
 	if is_last_player:
 		current_setup_turn_phase_subphases = next_phase
-	elif not setup_phase_production_queue.is_empty():
-		print("cacca")
-		var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
-		print("dice amount ", dice_amount)
-		emit_signal("dice_roll_requested", dice_amount)
-		return # this is important here
-
+	
 	_setup_turn_phase()
