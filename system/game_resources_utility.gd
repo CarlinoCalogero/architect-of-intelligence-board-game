@@ -16,5 +16,5 @@ func _populate_item_list():
 		var item_index: int = item_list.add_item(str(player_resources[game_resource.name]), game_resource.icon)
 		game_resource_indexes[game_resource.name] = item_index
 
-func _update_game_resource(_game_resource_key: String, _new_value: float):
+func _update_game_resource(_game_resource: GameResource, _new_value: float):
 	_populate_item_list()

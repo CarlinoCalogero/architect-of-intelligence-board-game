@@ -1,7 +1,7 @@
 class_name GameStateManager
 extends Node
 
-signal current_game_resource_changed(game_resource_key: String, new_value: float)
+signal current_game_resource_changed(game_resource: GameResource, new_value: float)
 
 var players: Array = []
 
@@ -26,9 +26,15 @@ func get_player_resources(player_index: int) -> Dictionary[String, float]:
 func get_player_last_built_structure_type(player_index: int) -> StructureResource:
 	return players[player_index].get_last_built_structure_type()
 
-func update_player_resource(player_index: int, game_resource_key: String, value: float) -> void:
-	var new_value: float = players[player_index].update_game_resource(game_resource_key, value)
-	emit_signal("current_game_resource_changed", game_resource_key, new_value)
+func get_player_built_structures(player_index: int) -> Dictionary[String, Array]:
+	return players[player_index].get_built_structures()
+
+func get_player_setup_phase_production_earning_queue(player_index: int) -> Array[GameResourceFormula]:
+	return players[player_index].get_setup_phase_production_earning_queue()
+
+func update_player_resource(player_index: int, game_resource: GameResource, value: float) -> void:
+	var new_value: float = players[player_index].update_game_resource(game_resource, value)
+	emit_signal("current_game_resource_changed", game_resource, new_value)
 
 func add_built_structure(player_index: int, structure: StructureResource, cell: Vector2i) -> bool:
 	return  players[player_index].add_built_structure(structure, cell)

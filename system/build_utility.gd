@@ -76,18 +76,10 @@ func _on_structure_built(cell_position: Vector2i) -> void:
 		current_buildable_structures.erase(structure.name)
 	
 	# -- Handle construction earnings
-	var on_build_earnings: Dictionary[String, float] = _get_earnings_from_structure_building_completion(structure)
-	for game_resource_key in on_build_earnings:
-		var earned_amount: float = on_build_earnings[game_resource_key]
-		GameManager.update_current_player_resource(game_resource_key, earned_amount)
+	for on_build_earning: Transaction in structure.on_build_earnings:
+		GameManager.update_current_player_resource(on_build_earning.resource_type, on_build_earning.amount)
 	
 	last_built_item_index = -1
-
-func _get_earnings_from_structure_building_completion(structure: StructureResource) -> Dictionary[String, float]:
-	var earnings:  Dictionary[String, float] = {}
-	for on_build_earning: Transaction in structure.on_build_earnings:
-		earnings[on_build_earning.resource_type.name] = on_build_earning.amount
-	return earnings
 
 func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
 	current_building_color = player_color.color

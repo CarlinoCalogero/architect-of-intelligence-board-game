@@ -23,7 +23,8 @@ enum SetupTurnPhaseSubphases {
 	FIRST_PLANT_BUILDING,
 	SECOND_PLANT_BUILDING,
 	GENERATIVE_AI_BUILDING,
-	RESOURCE_EARNINGS
+	RESOURCE_EARNINGS,
+	KNOWLEDGE_CARDS_DRAW
 }
 
 const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
@@ -39,6 +40,8 @@ var local_player_index: int = 0 # The actual player playing locally on the machi
 var current_player_index: int = -1 # Must start at -1
 var current_state: GamePhase = GamePhase.MAIN_MENU
 var current_setup_turn_phase_subphases: SetupTurnPhaseSubphases = SetupTurnPhaseSubphases.CITY_BUILDING
+
+var setup_phase_production_queue: Array[GameResourceFormula] = []
 
 var game_definition: GameDefinition
 
@@ -75,8 +78,8 @@ func get_current_player_color() -> PlayerColorResource:
 func get_current_player_resources() -> Dictionary[String, float]:
 	return game_state_manager.get_player_resources(current_player_index)
 
-func update_current_player_resource(game_resource_key: String, value: float) -> void:
-	game_state_manager.update_player_resource(current_player_index, game_resource_key, value)
+func update_current_player_resource(game_resource: GameResource, value: float) -> void:
+	game_state_manager.update_player_resource(current_player_index, game_resource, value)
 
 func add_current_player_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	return game_state_manager.add_built_structure(current_player_index, structure, cell)
@@ -130,7 +133,9 @@ func _setup_turn_phase():
 			return
 		
 		SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
-			emit_signal("dice_roll_requested", 2)
+			if setup_phase_production_queue.is_empty():
+				setup_phase_production_queue = game_state_manager.get_player_setup_phase_production_earning_queue(current_player_index)
+			emit_signal("dice_roll_requested", setup_phase_production_queue.front().number_of_dice_to_roll)
 			return
 		
 	# Deal cards, spawn pieces, etc.
@@ -203,11 +208,42 @@ func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphas
 		current_setup_turn_phase_subphases = next_phase
 	_setup_turn_phase()
 
-func _on_current_game_resource_changed(game_resource_key: String, new_value: float):
-	emit_signal("game_resource_changed", game_resource_key, new_value)
+func _on_current_game_resource_changed(game_resource: GameResource, new_value: float):
+	emit_signal("game_resource_changed", game_resource, new_value)
+	# miao
+	var player_text: String = "You have"
+	if local_player_index != current_player_index:
+		var player_color: PlayerColorResource = game_state_manager.get_player_color(current_player_index)
+		player_text = str(player_color.name) + " has"
+	var notification_text: String = player_text + " earned " + str(new_value) + " " + str(game_resource.unit_of_measurement)
+	emit_signal("push_notification_requested", notification_text)
 
 func _on_cpu_player_manager_build_structure_requested(player_index: int, structure_type: StructureResource) -> void:
 	emit_signal("build_structure_requested", player_index, structure_type)
 
 func on_dice_rolled(rolls: Array[int]):
 	emit_signal("push_notification_requested", "Rolled: " + str(rolls))
+	
+	if current_state == GamePhase.SETUP_TURN:
+		match current_setup_turn_phase_subphases:
+			SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
+				_on_dice_rollet_next_setup_turn_phase(rolls, SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW)
+
+func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupTurnPhaseSubphases):
+	var setup_phase_production_formula: GameResourceFormula = setup_phase_production_queue.pop_front()
+	var dice_sum: int = rolls.reduce(func(accum, number): return accum + number, 0)
+	var new_value: float = setup_phase_production_formula.base_value + (dice_sum * setup_phase_production_formula.multiplier_value)
+	update_current_player_resource(setup_phase_production_formula.resource_type, new_value)
+	print("bua")
+	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
+	
+	if is_last_player:
+		current_setup_turn_phase_subphases = next_phase
+	elif not setup_phase_production_queue.is_empty():
+		print("cacca")
+		var dice_amount: int = setup_phase_production_queue.front().number_of_dice_to_roll
+		print("dice amount ", dice_amount)
+		emit_signal("dice_roll_requested", dice_amount)
+		return # this is important here
+
+	_setup_turn_phase()
