@@ -107,6 +107,9 @@ func get_current_player_knowledge_cards() -> Array[KnowledgeCardResource]:
 func get_current_player_built_structure() -> Dictionary[String, Array]:
 	return game_state_manager.get_player_built_structures(current_player_index)
 
+func is_current_player_last_player() -> bool:
+	return current_player_index == (game_state_manager.get_number_of_players() - 1)
+
 func update_current_player_resource(game_resource: GameResource, value: float, producing_structure_built_data: BuiltData = null) -> float:
 	return game_state_manager.update_player_resource(current_player_index, game_resource, value, producing_structure_built_data)
 
@@ -142,6 +145,14 @@ func draw_random_knowledge_card() -> void:
 	# Add it to the player's inventory
 	game_state_manager.add_player_knowledge_card(current_player_index, picked_card)
 	emit_signal("knowledge_card_changed")
+
+# GAME UI FUNCTIONS
+
+func disable_ui_buttons():
+	emit_signal("set_ui_button_disabled_requested", true)
+
+func enable_ui_buttons():
+	emit_signal("set_ui_button_disabled_requested", false)
 
 # -- GAME FLOW FUNCTIONS
 
@@ -220,8 +231,7 @@ func _setup_turn_phase():
 			if is_local_player:
 				emit_signal("set_knowledge_card_desk_close_button_disabled_requested", false)
 			else:
-				var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
-				if is_last_player:
+				if is_current_player_last_player():
 					current_setup_turn_phase_subphases = SetupTurnPhaseSubphases.SETUP_COMPLETED
 				_setup_turn_phase()
 			return
@@ -269,26 +279,28 @@ func new_game(number_of_players: int = 4):
 	
 	_change_phase(GamePhase.SETUP_TURN)
 
-func on_structure_built(structure: StructureResource, cell_position: Vector2i):
-	add_current_player_built_structure(structure, cell_position)
+func on_structure_built(structure: StructureResource, cell_position: Vector2i) -> bool:
+	var is_was_structure_building_limit_reached: bool = add_current_player_built_structure(structure, cell_position)
 	
 	if current_state == GamePhase.SETUP_TURN:
 		match current_setup_turn_phase_subphases:
 			SetupTurnPhaseSubphases.CITY_BUILDING:
 				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.FIRST_PLANT_BUILDING)
-				return
+				return is_was_structure_building_limit_reached
 			
 			SetupTurnPhaseSubphases.FIRST_PLANT_BUILDING:
 				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.SECOND_PLANT_BUILDING)
-				return
+				return is_was_structure_building_limit_reached
 			
 			SetupTurnPhaseSubphases.SECOND_PLANT_BUILDING:
 				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING)
-				return
+				return is_was_structure_building_limit_reached
 			
 			SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING:
 				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.RESOURCE_EARNINGS)
-				return
+				return is_was_structure_building_limit_reached
+	
+	return is_was_structure_building_limit_reached
 
 func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphases):
 	if current_player_index == local_player_index:
@@ -331,8 +343,7 @@ func _on_dice_rolled_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 		roll_dice(dice_amount)
 		return # this is important here
 	
-	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
-	if is_last_player:
+	if is_current_player_last_player():
 		current_setup_turn_phase_subphases = next_phase
 	
 	_setup_turn_phase()

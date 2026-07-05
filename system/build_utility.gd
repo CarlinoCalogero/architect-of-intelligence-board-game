@@ -7,6 +7,7 @@ extends Control
 @onready var item_list: ItemList = $ItemList
 
 var last_built_item_index: int = -1
+var last_built_structure: StructureResource = null
 var current_buildable_structures: Dictionary[String, int]
 var current_building_color: Color
 
@@ -54,6 +55,7 @@ func set_buildable_structure_subset(structure_keys: Array[String]):
 
 func _reset():
 	last_built_item_index = -1
+	last_built_structure = null
 
 func _set_utility_disabled(is_disabled: bool):
 	# Only close if we need to disable, if we enable do not show it
@@ -71,22 +73,26 @@ func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button
 	item_list.hide()
 
 func _on_structure_built(cell_position: Vector2i) -> void:
-	if last_built_item_index < 0 or last_built_item_index >= item_list.item_count:
-		return
-
-	var structure: StructureResource = item_list.get_item_metadata(last_built_item_index)
+	var structure: StructureResource = null
+	
+	# if null last structure was not built by player
+	if last_built_item_index == -1:
+		structure = last_built_structure
+	else:
+		structure = item_list.get_item_metadata(last_built_item_index)
 	
 	# -- Handle structure build limit
 	if GameManager.on_structure_built(structure, cell_position):
-		item_list.remove_item(last_built_item_index)
-		current_buildable_structures.erase(structure.name)
+		# If structure was built by local player
+		if last_built_item_index > -1 and last_built_item_index < item_list.item_count:
+			item_list.remove_item(last_built_item_index)
+			current_buildable_structures.erase(structure.name)
+			last_built_item_index = -1
 	
 	# -- Handle construction earnings
 	var built_data: BuiltData = BuiltData.new(structure, cell_position, structure.bound_resource)
 	for on_build_earning: Transaction in structure.on_build_earnings:
 		GameManager.update_current_player_resource(on_build_earning.resource_type, on_build_earning.amount, built_data)
-	
-	last_built_item_index = -1
 
 func _on_player_changed(_new_player_index: int, player_color: PlayerColorResource):
 	current_building_color = player_color.color
@@ -97,12 +103,10 @@ func _on_player_changed(_new_player_index: int, player_color: PlayerColorResourc
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
 
-func _on_build_structure_requested(structure_type: StructureResource):
-	var structure_type_index: int = _find_structure_item_list_index(structure_type)
-	if structure_type_index == -1:
-		return
-	last_built_item_index = structure_type_index
-	grid_placememt_system.place_random_building(structure_type.texture)
+func _on_build_structure_requested(structure: StructureResource):
+	print("structure_type.name: [", structure.name, "]")
+	last_built_structure = structure
+	grid_placememt_system.place_random_building(structure.texture)
 
 func _on_set_build_utility_disabled_requested(is_disabled: bool):
 	_set_utility_disabled(is_disabled)

@@ -3,14 +3,18 @@ extends Node
 
 enum TurnPhase {
 	IDLE,
-	HARVEST_RESOURCES
+	HARVEST_RESOURCES,
+	PLAYER_IS_CHOOSING_ACTION
 }
 
 var current_turn_phase: TurnPhase = TurnPhase.IDLE
 var harvest_queue: Array[HarvestAction] = []
 
 func start_game_session():
+	GameManager.disable_ui_buttons()
 	_change_phase(TurnPhase.HARVEST_RESOURCES)
+
+# -- PHASE FUNCTIONS
 
 func _change_phase(new_phase: TurnPhase) -> void:
 	current_turn_phase = new_phase
@@ -19,6 +23,11 @@ func _change_phase(new_phase: TurnPhase) -> void:
 		TurnPhase.HARVEST_RESOURCES:
 			_harvest_resources_phase()
 			return
+		
+		TurnPhase.PLAYER_IS_CHOOSING_ACTION:
+			_player_is_choosing_action_phase()
+
+# -- HARVEST_RESOURCES PHASE FUNCTIONS
 
 func _harvest_resources_phase():
 	print("Harvesting resources...")
@@ -26,6 +35,10 @@ func _harvest_resources_phase():
 	_do_harvest_resource()
 
 func _do_harvest_resource():
+	if harvest_queue.is_empty():
+		_change_phase(TurnPhase.PLAYER_IS_CHOOSING_ACTION)
+		return
+	
 	var harvest_action: HarvestAction = harvest_queue.front()
 	var dice_amount: int = harvest_action.formula.number_of_dice_to_roll
 	GameManager.roll_dice(dice_amount)
@@ -50,6 +63,15 @@ func _build_harvest_queue() -> void:
 				else:
 					harvest_queue.append(harvest_action)
 
+# -- PLAYER_IS_CHOOSING_ACTION PHASE FUNCTIONS
+
+func _player_is_choosing_action_phase():
+	if GameManager.is_local_player_playing():
+		print("Waiting for player action...")
+		GameManager.enable_ui_buttons()
+
+# -- GAME MANAGER CALLBACKS
+
 func dice_rolled(rolls: Array[int]):
 	if TurnPhase.HARVEST_RESOURCES:
 		var harvest_action: HarvestAction = harvest_queue.pop_front()
@@ -65,6 +87,5 @@ func dice_rolled(rolls: Array[int]):
 		var producting_structure_built_data: BuiltData = harvest_action.producting_structure_built_data
 		GameManager.update_current_player_resource(harvest_formula.resource_type, new_value, producting_structure_built_data)
 		
-		if not harvest_queue.is_empty():
-			_do_harvest_resource()
+		_do_harvest_resource()
 		return

@@ -37,7 +37,9 @@ func _update_knowledge_cards():
 	_populate_knowledge_card_components()
 
 func _set_utility_disabled(is_disabled: bool):
-	_toggle_knowledge_cards_desk_visibility(not is_disabled)
+	# Only close if we need to disable, if we enable do not show it
+	if is_disabled:
+		_toggle_knowledge_cards_desk_visibility(not is_disabled)
 	open_knowledge_cards_desk_button.disabled = is_disabled
 
 func _set_knowledge_card_desk_close_button_disabled(is_disabled: bool):
