@@ -17,6 +17,9 @@ var player_owner_index: int = -1
 
 @onready var structure_info_tooltip_canvas_layer: CanvasLayer = $StructureInfoTooltipCanvasLayer
 @onready var structure_info_tooltip_panel_container: PanelContainer = $StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer
+
+@onready var structure_label: Label = $StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/StructureLabel
+
 @onready var production_v_box_container: VBoxContainer = $StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/ProductionVBoxContainer
 @onready var production_item_list: ItemList = $StructureInfoTooltipCanvasLayer/StructureInfoTooltipPanelContainer/VBoxContainer/ProductionVBoxContainer/ProductionItemList
 
@@ -66,6 +69,8 @@ func _on_structure_resource_changed() -> void:
 		animated_sprite_2d.scale = (target_size / original_size) * SCALE_PERCENTAGE
 	
 	# -- TOOLTIP CREATION LOGIC
+	structure_label.text = "[" + structure_resource.name + "]"
+	
 	if not structure_resource.turn_production.is_empty():
 		production_v_box_container.show()
 		production_item_list.clear()
@@ -99,10 +104,13 @@ func _on_structure_resource_changed() -> void:
 			next_tier_item_list.add_item(cost_text)
 	else:
 		next_tier_v_box_container.hide()
+	
+	_reset()
 
-func _check_if_structure_can_be_upgraded():
+func _check_if_structure_can_be_upgraded() -> bool:
 	if not GameManager.is_player_local_player(player_owner_index):
-		return
+		animated_sprite_2d.hide()
+		return false
 	
 	if structure_resource.next_tier:
 		var upgrade_costs: Array[Transaction] = structure_resource.next_tier.building_cost
@@ -122,6 +130,11 @@ func _check_if_structure_can_be_upgraded():
 			animated_sprite_2d.show()
 		else:
 			animated_sprite_2d.hide()
+		
+		return is_can_upgrade
+	
+	animated_sprite_2d.hide()
+	return false
 
 func _reset():
 	animated_sprite_2d.hide()
@@ -140,3 +153,16 @@ func _on_area_2d_mouse_exited() -> void:
 
 func _on_game_resource_changed(_game_resource: GameResource, _new_value: float) -> void:
 	_check_if_structure_can_be_upgraded()
+
+func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("Player clicked on structure: ", structure_resource.name)
+			if not _check_if_structure_can_be_upgraded():
+				return
+			var built_data: BuiltData = BuiltData.new(structure_resource, cell_position, structure_resource.bound_resource)
+			var next_tier_structure: StructureResource = structure_resource.next_tier
+			var upgrade_costs: Array[Transaction] = next_tier_structure.building_cost
+			for cost: Transaction in upgrade_costs:
+				GameManager.update_current_player_resource(cost.resource_type, -cost.amount, built_data)
+			structure_resource = next_tier_structure
