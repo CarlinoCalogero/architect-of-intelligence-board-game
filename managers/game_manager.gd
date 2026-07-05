@@ -140,7 +140,7 @@ func _setup_turn_phase():
 			if current_player_index == local_player_index:
 				emit_signal("dice_roll_requested", dice_amount)
 			else:
-				emit_signal("hidden_dice_roll_requested", dice_amount)
+				cpu_player_manager.cpu_player_rolls_dice(current_player_index, dice_amount)
 			return
 		
 		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
@@ -248,7 +248,7 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 		if current_player_index == local_player_index:
 			emit_signal("dice_roll_requested", dice_amount)
 		else:
-			emit_signal("hidden_dice_roll_requested", dice_amount)
+			cpu_player_manager.cpu_player_rolls_dice(current_player_index, dice_amount)
 		return # this is important here
 	
 	var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
@@ -256,3 +256,6 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 		current_setup_turn_phase_subphases = next_phase
 	
 	_setup_turn_phase()
+
+func _on_cpu_player_manager_roll_dice_requested(_player_index: int, dice_amount: int) -> void:
+	emit_signal("hidden_dice_roll_requested", dice_amount)

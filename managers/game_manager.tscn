@@ -11,3 +11,4 @@ script = ExtResource("1_atyjh")
 [node name="CPUPlayerManager" parent="." unique_id=66729122 instance=ExtResource("2_8647g")]
 
 [connection signal="build_structure_requested" from="CPUPlayerManager" to="." method="_on_cpu_player_manager_build_structure_requested"]
+[connection signal="roll_dice_requested" from="CPUPlayerManager" to="." method="_on_cpu_player_manager_roll_dice_requested"]
