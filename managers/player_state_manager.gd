@@ -8,8 +8,6 @@ var knowledge_cards: Array[KnowledgeCardResource]
 
 var last_built_structure_type: StructureResource
 
-const MAX_KNOWLEDGE_CARD: int = 5
-
 func _init(new_player_color: PlayerColorResource, game_resources_list: Array[GameResource]):
 	player_color = new_player_color
 	
@@ -68,6 +66,4 @@ func update_game_resource(game_resource: GameResource, value: float) -> float:
 	return new_value
 
 func add_knowledge_card(knowledge_card: KnowledgeCardResource):
-	if knowledge_cards.size() == MAX_KNOWLEDGE_CARD:
-		return
 	knowledge_cards.push_back(knowledge_card)

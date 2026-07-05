@@ -12,6 +12,8 @@ const STRUCTURE_RESOURCE_FOLDER: String = "structure_resources"
 const PLAYER_COLOR_RESOURCE_FOLDER: String = "player_colors"
 const KNOWLEDGE_CARDS_RESOURCE_FOLDER: String = "knowledge_cards"
 
+const MAX_KNOWLEDGE_CARD: int = 5
+
 func _ready() -> void:
 	_load_all_game_resource_resources_from_folder()
 	_load_all_structure_resources_from_folder()
@@ -74,3 +76,9 @@ func get_player_colors() -> Array[PlayerColorResource]:
 
 func get_max_number_of_players() -> int:
 	return player_colors.size()
+
+func get_knowledge_cards() -> Array[KnowledgeCardResource]:
+	return knowledge_cards
+
+func get_max_number_of_knowledge_cards() -> int:
+	return MAX_KNOWLEDGE_CARD

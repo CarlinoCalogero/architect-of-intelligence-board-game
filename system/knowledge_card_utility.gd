@@ -12,6 +12,7 @@ var game_resource_indexes: Dictionary[String, int] = {}
 
 func _ready():
 	GameManager.knowledge_card_changed.connect(_update_knowledge_cards)
+	GameManager.toggle_knowledge_card_utility_requested.connect(_toggle_visibility)
 	_populate_knowledge_card_components()
 	self.hide()
 
@@ -25,5 +26,12 @@ func _populate_knowledge_card_components():
 		else:
 			current_knowledge_card_component.hide()
 
-func _update_knowledge_cards(_game_resource: GameResource, _new_value: float):
+func _update_knowledge_cards():
 	_populate_knowledge_card_components()
+
+func _toggle_visibility(is_next_visible: bool):
+	self.visible = is_next_visible
+
+func _on_close_button_pressed() -> void:
+	self.hide() # this is important here
+	GameManager.on_knowledge_card_utility_closed()

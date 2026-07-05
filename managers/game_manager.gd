@@ -10,6 +10,7 @@ signal dice_roll_requested(number_of_dice: int)
 signal push_notification_requested(message: String, display_time: float)
 signal hidden_dice_roll_requested(number_of_dice: int)
 signal knowledge_card_changed
+signal toggle_knowledge_card_utility_requested(is_visible: bool)
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -26,7 +27,8 @@ enum SetupTurnPhaseSubphases {
 	SECOND_PLANT_BUILDING,
 	GENERATIVE_AI_BUILDING,
 	RESOURCE_EARNINGS,
-	KNOWLEDGE_CARDS_DRAW
+	KNOWLEDGE_CARDS_DRAW,
+	SETUP_COMPLETED
 }
 
 const GAME_DEFINITION_RESOURCE: Resource = preload("uid://dso50mfa3p71h")
@@ -67,6 +69,15 @@ func get_game_resources_list() -> Array[GameResource]:
 func get_buildable_structure_list() -> Array[StructureResource]:
 	return game_definition.get_buildable_structures()
 
+func get_knowledge_cards_list() -> Array[KnowledgeCardResource]:
+	return game_definition.get_knowledge_cards()
+
+func get_max_number_of_players() -> int:
+	return game_definition.get_max_number_of_players()
+
+func get_max_number_of_knowledge_cards() -> int:
+	return game_definition.get_max_number_of_knowledge_cards()
+
 # -- LOCAL PLAYER FUNCTIONS
 
 func get_local_player_resources() -> Dictionary[String, float]:
@@ -83,11 +94,44 @@ func get_current_player_color() -> PlayerColorResource:
 func get_current_player_resources() -> Dictionary[String, float]:
 	return game_state_manager.get_player_resources(current_player_index)
 
+func get_current_player_knowledge_cards() -> Array[KnowledgeCardResource]:
+	return game_state_manager.get_player_knowledge_cards(current_player_index)
+
 func update_current_player_resource(game_resource: GameResource, value: float) -> void:
 	game_state_manager.update_player_resource(current_player_index, game_resource, value)
 
 func add_current_player_built_structure(structure: StructureResource, cell: Vector2i) -> bool:
 	return game_state_manager.add_built_structure(current_player_index, structure, cell)
+
+func draw_random_knowledge_card() -> void:
+	var knowledge_card_list: Array[KnowledgeCardResource] = get_knowledge_cards_list()
+	var owned_knowledge_cards: Array[KnowledgeCardResource] = get_current_player_knowledge_cards()
+	var max_number_of_knowledge_cards: int = get_max_number_of_knowledge_cards()
+	
+	# First, check if the player is even allowed to draw a card
+	if owned_knowledge_cards.size() >= max_number_of_knowledge_cards:
+		print("Player's hand is full!")
+		return
+		
+	# Create a new array to hold only the cards the player doesn't have
+	var available_cards: Array[KnowledgeCardResource] = []
+	
+	for card in knowledge_card_list:
+		# If the owned list DOES NOT have this card, it's safe to draw
+		if not owned_knowledge_cards.has(card):
+			available_cards.append(card)
+			
+	# Make sure there are actually cards left to draw!
+	if available_cards.is_empty():
+		print("No more unique cards left to draw!")
+		return
+		
+	# Pick a random card from the available pool
+	var picked_card: KnowledgeCardResource = available_cards.pick_random()
+	
+	# Add it to the player's inventory
+	game_state_manager.add_player_knowledge_card(current_player_index, picked_card)
+	emit_signal("knowledge_card_changed")
 
 # -- GAME FLOW FUNCTIONS
 
@@ -148,6 +192,25 @@ func _setup_turn_phase():
 			return
 		
 		SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
+			var max_number_of_knowledge_cards: int = get_max_number_of_knowledge_cards()
+			for index in range(max_number_of_knowledge_cards):
+				var is_local_player: bool = current_player_index == local_player_index
+				if is_local_player:
+					if index == 0:
+						emit_signal("toggle_knowledge_card_utility_requested", true)
+					print("Drawing the knowledge card [", index, "] for the local player, please wait...")
+				else:
+					print("Drawing the knowledge card [", index, "] for player [", get_current_player_color().name, "], please wait...")
+				
+				cpu_player_wait_timer.start()
+				await cpu_player_wait_timer.timeout
+				
+				draw_random_knowledge_card()
+				
+			return
+		
+		SetupTurnPhaseSubphases.SETUP_COMPLETED:
+			print("Board setup successfully completed...")
 			return
 		
 	# Deal cards, spawn pieces, etc.
@@ -180,7 +243,7 @@ func _setup_turn_phase_building_subphase(whitelisted_structures: Array[String], 
 		cpu_player_manager.cpu_player_builds_structure(current_player_index, cpu_player_structure_resource_to_be_built)
 
 func new_game(number_of_players: int = 4):
-	if number_of_players > game_definition.get_max_number_of_players():
+	if number_of_players > get_max_number_of_players():
 		return
 	
 	game_state_manager = GAME_STATE_MANAGER.instantiate()
@@ -262,3 +325,12 @@ func _on_dice_rollet_next_setup_turn_phase(rolls: Array[int], next_phase: SetupT
 
 func _on_cpu_player_manager_roll_dice_requested(_player_index: int, dice_amount: int) -> void:
 	emit_signal("hidden_dice_roll_requested", dice_amount)
+
+func on_knowledge_card_utility_closed():
+	if current_state == GamePhase.SETUP_TURN:
+		match current_setup_turn_phase_subphases:
+			SetupTurnPhaseSubphases.KNOWLEDGE_CARDS_DRAW:
+				var is_last_player: bool = current_player_index == (game_state_manager.get_number_of_players() - 1)
+				if is_last_player:
+					current_setup_turn_phase_subphases = SetupTurnPhaseSubphases.SETUP_COMPLETED
+				_setup_turn_phase()

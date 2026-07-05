@@ -41,3 +41,6 @@ func add_built_structure(player_index: int, structure: StructureResource, cell: 
 
 func get_player_knowledge_cards(player_index: int) -> Array[KnowledgeCardResource]:
 	return players[player_index].get_knowledge_cards()
+
+func add_player_knowledge_card(player_index: int, knowledge_card: KnowledgeCardResource):
+	return players[player_index].add_knowledge_card(knowledge_card)
