@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://dnk7ylmkracsk"]
+
+[ext_resource type="Script" uid="uid://bl1yf8r77hxdp" path="res://system/knowledge_card_utility.gd" id="1_mxnph"]
+[ext_resource type="PackedScene" uid="uid://c2qu20hlxdg7r" path="res://system/knowledge_card_component.tscn" id="2_p5ce3"]
+
+[node name="KnowledgeCardUtility" type="Control" unique_id=1076800009]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mxnph")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2056701140]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.68235296)
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=506480487]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="FirstRowHBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1248666286]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="TopLeftKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=404188622 instance=ExtResource("2_p5ce3")]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TopMiddleKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=744318004 instance=ExtResource("2_p5ce3")]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TopRightKnowledgeCardComponent" parent="VBoxContainer/FirstRowHBoxContainer" unique_id=153961975 instance=ExtResource("2_p5ce3")]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 4
+
+[node name="SecondRowHBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=221608183]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="BottomLeftKnowledgeCardComponent" parent="VBoxContainer/SecondRowHBoxContainer" unique_id=1634492637 instance=ExtResource("2_p5ce3")]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 4
+
+[node name="BottomRightKnowledgeCardComponent" parent="VBoxContainer/SecondRowHBoxContainer" unique_id=867050662 instance=ExtResource("2_p5ce3")]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 4

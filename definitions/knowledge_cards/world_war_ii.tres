@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KnowledgeCardResource" format=3 uid="uid://bq0w7jeeyy5ru"]
+
+[ext_resource type="Script" uid="uid://dmpjlc8eu1km8" path="res://domain/knowledge_card_resource.gd" id="1_mxgn0"]
+
+[resource]
+script = ExtResource("1_mxgn0")
+id = 3
+description = "World War II"
+metadata/_custom_type_script = "uid://dmpjlc8eu1km8"

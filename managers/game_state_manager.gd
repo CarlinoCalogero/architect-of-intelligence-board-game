@@ -38,3 +38,6 @@ func update_player_resource(player_index: int, game_resource: GameResource, valu
 
 func add_built_structure(player_index: int, structure: StructureResource, cell: Vector2i) -> bool:
 	return  players[player_index].add_built_structure(structure, cell)
+
+func get_player_knowledge_cards(player_index: int) -> Array[KnowledgeCardResource]:
+	return players[player_index].get_knowledge_cards()

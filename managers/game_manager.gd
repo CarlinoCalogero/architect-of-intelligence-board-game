@@ -4,11 +4,12 @@ signal player_changed(new_player_index: int, player_color: PlayerColorResource)
 signal local_player_turn_started
 signal local_player_turn_ended
 signal buidable_structure_disabled(structure_keys: Array[String])
-signal game_resource_changed(game_resource_key: String, new_value: float)
+signal game_resource_changed(game_resource: GameResource, new_value: float)
 signal build_structure_requested(player_index: int, structure_type: StructureResource)
 signal dice_roll_requested(number_of_dice: int)
 signal push_notification_requested(message: String, display_time: float)
 signal hidden_dice_roll_requested(number_of_dice: int)
+signal knowledge_card_changed
 
 @onready var cpu_player_wait_timer: Timer = $CPUPlayerWaitTimer
 @onready var cpu_player_manager: CPUPlayerManager = $CPUPlayerManager
@@ -70,6 +71,9 @@ func get_buildable_structure_list() -> Array[StructureResource]:
 
 func get_local_player_resources() -> Dictionary[String, float]:
 	return game_state_manager.get_player_resources(local_player_index)
+
+func get_local_player_knowledge_cards() -> Array[KnowledgeCardResource]:
+	return game_state_manager.get_player_knowledge_cards(local_player_index)
 
 # -- CURRENT PLAYER FUNCTIONS
 
@@ -218,7 +222,6 @@ func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphas
 
 func _on_current_game_resource_changed(game_resource: GameResource, new_value: float):
 	emit_signal("game_resource_changed", game_resource, new_value)
-	# miao
 	var player_text: String = "You have"
 	if local_player_index != current_player_index:
 		var player_color: PlayerColorResource = game_state_manager.get_player_color(current_player_index)

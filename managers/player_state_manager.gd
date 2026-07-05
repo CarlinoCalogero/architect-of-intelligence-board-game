@@ -4,8 +4,11 @@ extends Resource
 var player_color: PlayerColorResource
 var player_resources: Dictionary[String, float]
 var built_structures: Dictionary[String, Array] = {}
+var knowledge_cards: Array[KnowledgeCardResource]
 
 var last_built_structure_type: StructureResource
+
+const MAX_KNOWLEDGE_CARD: int = 5
 
 func _init(new_player_color: PlayerColorResource, game_resources_list: Array[GameResource]):
 	player_color = new_player_color
@@ -36,6 +39,9 @@ func get_setup_phase_production_earning_queue() -> Array[GameResourceFormula]:
 			earning_queue.append_array(production_array)
 	return earning_queue
 
+func get_knowledge_cards() -> Array[KnowledgeCardResource]:
+	return knowledge_cards
+
 # -- UTILITY FUNCTIONS
 
 # If return is true player has built the maximum number of this type structure
@@ -60,3 +66,8 @@ func update_game_resource(game_resource: GameResource, value: float) -> float:
 	var new_value = player_resources[resource_key] + value
 	player_resources[resource_key] = new_value
 	return new_value
+
+func add_knowledge_card(knowledge_card: KnowledgeCardResource):
+	if knowledge_cards.size() == MAX_KNOWLEDGE_CARD:
+		return
+	knowledge_cards.push_back(knowledge_card)

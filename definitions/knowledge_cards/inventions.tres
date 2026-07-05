@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KnowledgeCardResource" format=3 uid="uid://cr6imgsjwf04p"]
+
+[ext_resource type="Script" uid="uid://dmpjlc8eu1km8" path="res://domain/knowledge_card_resource.gd" id="1_mwt81"]
+
+[resource]
+script = ExtResource("1_mwt81")
+id = 8
+description = "Inventions"
+metadata/_custom_type_script = "uid://dmpjlc8eu1km8"

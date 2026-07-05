@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KnowledgeCardResource" format=3 uid="uid://dv64vq4qwiftb"]
+
+[ext_resource type="Script" uid="uid://dmpjlc8eu1km8" path="res://domain/knowledge_card_resource.gd" id="1_ukg4t"]
+
+[resource]
+script = ExtResource("1_ukg4t")
+id = 7
+description = "Human Anatomy"
+metadata/_custom_type_script = "uid://dmpjlc8eu1km8"

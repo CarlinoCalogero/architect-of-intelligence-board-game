@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KnowledgeCardResource" format=3 uid="uid://c1obdadegivuv"]
+
+[ext_resource type="Script" uid="uid://dmpjlc8eu1km8" path="res://domain/knowledge_card_resource.gd" id="1_1fkb3"]
+
+[resource]
+script = ExtResource("1_1fkb3")
+id = 9
+description = "Italian Literature"
+metadata/_custom_type_script = "uid://dmpjlc8eu1km8"
