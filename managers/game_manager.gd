@@ -3,6 +3,7 @@ extends Node
 signal player_changed(new_player_index: int, player_color: PlayerColorResource)
 signal set_build_utility_disabled_requested(is_disabled: bool)
 signal buidable_structure_disabled(structure_keys: Array[String])
+signal enable_all_buildable_structures
 signal game_resource_changed(game_resource: GameResource, new_value: float)
 signal build_structure_requested(structure_type: StructureResource)
 signal dice_roll_requested(number_of_dice: int)
@@ -298,6 +299,8 @@ func on_structure_built(structure: StructureResource, cell_position: Vector2i) -
 			
 			SetupTurnPhaseSubphases.GENERATIVE_AI_BUILDING:
 				_on_structure_built_next_setup_turn_phase(SetupTurnPhaseSubphases.RESOURCE_EARNINGS)
+				if current_setup_turn_phase_subphases == SetupTurnPhaseSubphases.RESOURCE_EARNINGS:
+					emit_signal("enable_all_buildable_structures")
 				return is_was_structure_building_limit_reached
 	
 	return is_was_structure_building_limit_reached
@@ -305,7 +308,7 @@ func on_structure_built(structure: StructureResource, cell_position: Vector2i) -
 func _on_structure_built_next_setup_turn_phase(next_phase: SetupTurnPhaseSubphases):
 	if current_player_index == local_player_index:
 		emit_signal("set_build_utility_disabled_requested", true)
-	elif current_player_index == game_state_manager.get_number_of_players() - 1:
+	elif is_current_player_last_player():
 		current_setup_turn_phase_subphases = next_phase
 	_setup_turn_phase()
 

@@ -17,6 +17,7 @@ func _ready():
 	GameManager.player_changed.connect(_on_player_changed)
 	GameManager.set_build_utility_disabled_requested.connect(_on_set_build_utility_disabled_requested)
 	GameManager.buidable_structure_disabled.connect(_on_buidable_structure_disabled)
+	GameManager.enable_all_buildable_structures.connect(_on_enable_all_buildable_structures)
 	GameManager.build_structure_requested.connect(_on_build_structure_requested)
 	GameManager.set_ui_button_disabled_requested.connect(_on_set_ui_button_disabled_requested)
 	
@@ -52,6 +53,10 @@ func _toggle_structures_item_list(is_next_visible: bool):
 func set_buildable_structure_subset(structure_keys: Array[String]):
 	for available_structure_key in current_buildable_structures:
 		item_list.set_item_disabled(current_buildable_structures[available_structure_key], not structure_keys.has(available_structure_key))
+
+func enable_all_buildable_structures():
+	for item_index in range(item_list.item_count):
+		item_list.set_item_disabled(item_index, false)
 
 func _reset():
 	last_built_item_index = -1
@@ -102,6 +107,9 @@ func _on_player_changed(_new_player_index: int, player_color: PlayerColorResourc
 
 func _on_buidable_structure_disabled(structure_keys: Array[String]):
 	set_buildable_structure_subset(structure_keys)
+
+func _on_enable_all_buildable_structures() -> void:
+	enable_all_buildable_structures()
 
 func _on_build_structure_requested(structure: StructureResource):
 	print("structure_type.name: [", structure.name, "]")
