@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://i152whgpb360"]
+
+[ext_resource type="Script" uid="uid://dxv80bjf5cx5a" path="res://system/trade_utility/acquiring_item_component.gd" id="1_jhqek"]
+
+[node name="AcquiringItemComponent" type="HBoxContainer" unique_id=1007708987]
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+alignment = 1
+script = ExtResource("1_jhqek")
+
+[node name="ItemIconTextureRect" type="TextureRect" parent="." unique_id=1491607361]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1356148676]
+layout_mode = 2
+
+[node name="AmountSpinBox" type="SpinBox" parent="CenterContainer" unique_id=836973646]
+layout_mode = 2
+max_value = 0.0
+allow_greater = true
+
+[connection signal="value_changed" from="CenterContainer/AmountSpinBox" to="." method="_on_amount_spin_box_value_changed"]

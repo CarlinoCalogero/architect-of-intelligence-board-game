@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="TradeResource" format=3 uid="uid://do278dmhuryf1"]
+
+[ext_resource type="Script" uid="uid://crqpslldpw5lq" path="res://domain/trade_entry.gd" id="1_i8o2t"]
+[ext_resource type="Script" uid="uid://c57jkn7fo3b3t" path="res://domain/trade_resource.gd" id="2_38hfv"]
+[ext_resource type="Resource" uid="uid://bgy7h57yvc1hd" path="res://definitions/card_types/event_card.tres" id="2_ak3c7"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="3_wurcw"]
+[ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="4_l7ybt"]
+[ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="5_gerhy"]
+
+[sub_resource type="Resource" id="Resource_i8o2t"]
+script = ExtResource("1_i8o2t")
+card = ExtResource("2_ak3c7")
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_a2jyc"]
+script = ExtResource("1_i8o2t")
+game_resource = ExtResource("3_wurcw")
+amount = 300000000
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_g3mxf"]
+script = ExtResource("1_i8o2t")
+game_resource = ExtResource("4_l7ybt")
+amount = 600
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_ty2gt"]
+script = ExtResource("1_i8o2t")
+game_resource = ExtResource("5_gerhy")
+amount = 180
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[resource]
+script = ExtResource("2_38hfv")
+acquired_items = Array[ExtResource("1_i8o2t")]([SubResource("Resource_i8o2t")])
+given_items = Array[ExtResource("1_i8o2t")]([SubResource("Resource_a2jyc"), SubResource("Resource_g3mxf"), SubResource("Resource_ty2gt")])
+metadata/_custom_type_script = "uid://c57jkn7fo3b3t"

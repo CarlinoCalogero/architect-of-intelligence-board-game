@@ -22,6 +22,7 @@ mouse_default_cursor_shape = 2
 text = "Build"
 
 [node name="ItemList" type="ItemList" parent="." unique_id=707975690]
+visible = false
 layout_mode = 1
 offset_left = 483.0
 offset_top = 305.0

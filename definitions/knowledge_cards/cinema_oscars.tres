@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="KnowledgeCardResource" format=3 uid="uid://cyx6tp6osrcqb"]
 
 [ext_resource type="Script" uid="uid://dmpjlc8eu1km8" path="res://domain/knowledge_card_resource.gd" id="1_3q6rr"]
+[ext_resource type="Resource" uid="uid://bxruhqnv8aan5" path="res://definitions/card_types/knowledge_card.tres" id="1_cio10"]
 
 [resource]
 script = ExtResource("1_3q6rr")
 id = 10
 description = "Cinema: Oscars"
+card_type = ExtResource("1_cio10")
 metadata/_custom_type_script = "uid://dmpjlc8eu1km8"

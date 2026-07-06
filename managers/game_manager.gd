@@ -81,6 +81,9 @@ func get_max_number_of_players() -> int:
 func get_max_number_of_knowledge_cards() -> int:
 	return game_definition.get_max_number_of_knowledge_cards()
 
+func get_trades_list() -> Array[TradeResource]:
+	return game_definition.get_trades()
+
 # -- LOCAL PLAYER FUNCTIONS
 
 func get_local_player_resources() -> Dictionary[String, float]:

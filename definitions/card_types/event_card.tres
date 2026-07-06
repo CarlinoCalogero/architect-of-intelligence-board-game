@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CardTypeResource" format=3 uid="uid://bgy7h57yvc1hd"]
+
+[ext_resource type="Script" uid="uid://b6gmaosjfxtdf" path="res://domain/card_type_resource.gd" id="1_2xhj8"]
+
+[resource]
+script = ExtResource("1_2xhj8")
+name = "Event Card"
+metadata/_custom_type_script = "uid://b6gmaosjfxtdf"

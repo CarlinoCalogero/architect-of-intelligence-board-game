@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b6sd08oted551" path="res://system/dice_roll_utility.tscn" id="3_ict30"]
 [ext_resource type="PackedScene" uid="uid://w30sjjkdm1kt" path="res://system/notification_utility.tscn" id="4_ict30"]
 [ext_resource type="PackedScene" uid="uid://dnk7ylmkracsk" path="res://system/knowledge_card_utility.tscn" id="5_5qn5g"]
+[ext_resource type="PackedScene" uid="uid://dvpq2xfs08dk1" path="res://system/trades_utility.tscn" id="6_hixa1"]
 
 [node name="Board" type="Node2D" unique_id=2078254691]
 
@@ -25,6 +26,8 @@ visible = false
 [node name="NotificationUtility" parent="CanvasLayer" unique_id=214369770 instance=ExtResource("4_ict30")]
 
 [node name="KnowledgeCardUtility" parent="CanvasLayer" unique_id=1076800009 instance=ExtResource("5_5qn5g")]
+
+[node name="TradesUtility" parent="CanvasLayer" unique_id=2040074337 instance=ExtResource("6_hixa1")]
 
 [node name="GridPlacementSystem" parent="." unique_id=994121627 instance=ExtResource("1_j4gyj")]
 

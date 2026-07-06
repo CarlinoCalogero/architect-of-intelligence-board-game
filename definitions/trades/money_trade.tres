@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="TradeResource" format=3 uid="uid://ce86h6snkmq32"]
+
+[ext_resource type="Script" uid="uid://crqpslldpw5lq" path="res://domain/trade_entry.gd" id="1_baff1"]
+[ext_resource type="Script" uid="uid://c57jkn7fo3b3t" path="res://domain/trade_resource.gd" id="2_hmssl"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="2_qb6hv"]
+[ext_resource type="Resource" uid="uid://bs6f20tn7noet" path="res://definitions/game_resources/electricity.tres" id="3_ppt3o"]
+[ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="4_in0kk"]
+
+[sub_resource type="Resource" id="Resource_g3r5g"]
+script = ExtResource("1_baff1")
+game_resource = ExtResource("2_qb6hv")
+amount = 55000000
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_ucjuu"]
+script = ExtResource("1_baff1")
+game_resource = ExtResource("3_ppt3o")
+amount = 100
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_neapg"]
+script = ExtResource("1_baff1")
+game_resource = ExtResource("4_in0kk")
+amount = 15
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[resource]
+script = ExtResource("2_hmssl")
+acquired_items = Array[ExtResource("1_baff1")]([SubResource("Resource_g3r5g")])
+given_items = Array[ExtResource("1_baff1")]([SubResource("Resource_ucjuu"), SubResource("Resource_neapg")])
+metadata/_custom_type_script = "uid://c57jkn7fo3b3t"

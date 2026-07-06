@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cnwigumvxhaxm"]
+
+[ext_resource type="Script" uid="uid://6vfbtgemdtgp" path="res://system/trade_utility/trade_component.gd" id="1_c5rlu"]
+
+[node name="TradeComponent" type="HBoxContainer" unique_id=231053764]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 128.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+alignment = 1
+script = ExtResource("1_c5rlu")
+
+[node name="AcquiringItemListVBoxContainer" type="VBoxContainer" parent="." unique_id=848477123]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GivingItemListVBoxContainer" type="VBoxContainer" parent="." unique_id=1783908750]
+layout_mode = 2
+size_flags_horizontal = 3

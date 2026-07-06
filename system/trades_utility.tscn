@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://dvpq2xfs08dk1"]
+
+[ext_resource type="Script" uid="uid://bmvv8qhiiihdr" path="res://system/make_trade_offer_view.gd" id="1_ccvgd"]
+
+[node name="TradesUtility" type="Control" unique_id=2040074337]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="OpenMakeTradeOfferButton" type="Button" parent="." unique_id=1278157184]
+layout_mode = 0
+offset_left = 319.0
+offset_top = 599.0
+offset_right = 380.0
+offset_bottom = 630.0
+text = "Trades"
+
+[node name="MakeTradeOfferView" type="Control" parent="." unique_id=2036198595]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ccvgd")
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="MakeTradeOfferView" unique_id=1206224362]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.68235296)
+metadata/_edit_use_anchors_ = true
+
+[node name="TradesListVBoxContainer" type="VBoxContainer" parent="MakeTradeOfferView" unique_id=1491019490]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="MakeTradeOfferView/TradesListVBoxContainer" unique_id=286064161]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MakeTradeOfferView/TradesListVBoxContainer/MarginContainer2" unique_id=2093856613]
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="MakeTradeOfferView/TradesListVBoxContainer/MarginContainer2/HBoxContainer" unique_id=1841527308]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Give"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="MakeTradeOfferView/TradesListVBoxContainer/MarginContainer2/HBoxContainer" unique_id=1449737040]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Acquire"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MakeTradeOfferView/TradesListVBoxContainer" unique_id=1753461713]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MakeTradeOfferView/TradesListVBoxContainer/MarginContainer" unique_id=691124664]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TradeEntriesVBoxContainer" type="VBoxContainer" parent="MakeTradeOfferView/TradesListVBoxContainer/MarginContainer/ScrollContainer" unique_id=443466682]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ReceiveTradeOffer" type="Control" parent="." unique_id=576824032]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

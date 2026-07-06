@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TradeResource" format=3 uid="uid://81q0dem3frje"]
+
+[ext_resource type="Script" uid="uid://crqpslldpw5lq" path="res://domain/trade_entry.gd" id="1_xip1q"]
+[ext_resource type="Script" uid="uid://c57jkn7fo3b3t" path="res://domain/trade_resource.gd" id="2_fsvr5"]
+[ext_resource type="Resource" uid="uid://d3y835ccd1obt" path="res://definitions/card_types/challenge_refusal_card.tres" id="2_rklqc"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="3_o1h5n"]
+
+[sub_resource type="Resource" id="Resource_j3qje"]
+script = ExtResource("1_xip1q")
+card = ExtResource("2_rklqc")
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_ltrhr"]
+script = ExtResource("1_xip1q")
+game_resource = ExtResource("3_o1h5n")
+amount = 1000000000
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[resource]
+script = ExtResource("2_fsvr5")
+acquired_items = Array[ExtResource("1_xip1q")]([SubResource("Resource_j3qje")])
+given_items = Array[ExtResource("1_xip1q")]([SubResource("Resource_ltrhr")])
+metadata/_custom_type_script = "uid://c57jkn7fo3b3t"

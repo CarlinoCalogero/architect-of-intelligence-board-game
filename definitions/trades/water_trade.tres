@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="TradeResource" format=3 uid="uid://clrtgwwvmq8uu"]
+
+[ext_resource type="Script" uid="uid://crqpslldpw5lq" path="res://domain/trade_entry.gd" id="1_ful5u"]
+[ext_resource type="Script" uid="uid://c57jkn7fo3b3t" path="res://domain/trade_resource.gd" id="2_0kd6e"]
+[ext_resource type="Resource" uid="uid://drmgrhk03ik75" path="res://definitions/game_resources/water.tres" id="2_rgskv"]
+[ext_resource type="Resource" uid="uid://ctlp3vehg5fod" path="res://definitions/game_resources/money.tres" id="3_u43lc"]
+
+[sub_resource type="Resource" id="Resource_m4f5m"]
+script = ExtResource("1_ful5u")
+game_resource = ExtResource("2_rgskv")
+amount = 15
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[sub_resource type="Resource" id="Resource_dpf1i"]
+script = ExtResource("1_ful5u")
+game_resource = ExtResource("3_u43lc")
+amount = 5000000
+metadata/_custom_type_script = "uid://crqpslldpw5lq"
+
+[resource]
+script = ExtResource("2_0kd6e")
+acquired_items = Array[ExtResource("1_ful5u")]([SubResource("Resource_m4f5m")])
+given_items = Array[ExtResource("1_ful5u")]([SubResource("Resource_dpf1i")])
+metadata/_custom_type_script = "uid://c57jkn7fo3b3t"

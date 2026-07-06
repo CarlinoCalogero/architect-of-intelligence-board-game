@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CardTypeResource" format=3 uid="uid://bxruhqnv8aan5"]
+
+[ext_resource type="Script" uid="uid://b6gmaosjfxtdf" path="res://domain/card_type_resource.gd" id="1_kjlk2"]
+
+[resource]
+script = ExtResource("1_kjlk2")
+name = "Knowledge Card"
+metadata/_custom_type_script = "uid://b6gmaosjfxtdf"

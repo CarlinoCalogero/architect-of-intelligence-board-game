@@ -5,12 +5,16 @@ var game_resources: Array[GameResource] = []
 var structures: Array[StructureResource] = []
 var player_colors: Array[PlayerColorResource] = []
 var knowledge_cards: Array[KnowledgeCardResource] = []
+var card_types: Array[CardTypeResource] = []
+var trades: Array[TradeResource] = []
 
 const BASE_RESOURCES_FOLDER_PATH: String = "res://definitions/"
+const CARD_TYPES_RESOURCE_FOLDER: String = "card_types"
 const GAME_RESOURCE_FOLDER: String = "game_resources"
-const STRUCTURE_RESOURCE_FOLDER: String = "structure_resources"
-const PLAYER_COLOR_RESOURCE_FOLDER: String = "player_colors"
 const KNOWLEDGE_CARDS_RESOURCE_FOLDER: String = "knowledge_cards"
+const PLAYER_COLOR_RESOURCE_FOLDER: String = "player_colors"
+const STRUCTURE_RESOURCE_FOLDER: String = "structure_resources"
+const TRADES_RESOURCE_FOLDER: String = "trades"
 
 const MAX_KNOWLEDGE_CARD: int = 5
 
@@ -19,6 +23,8 @@ func _ready() -> void:
 	_load_all_structure_resources_from_folder()
 	_load_all_player_color_resources_from_folder()
 	_load_all_knowledge_cards_resources_from_folder()
+	_load_all_card_types_resources_from_folder()
+	_load_all_trades_resources_from_folder()
 
 func _load_all_game_resource_resources_from_folder():
 	_load_resources_from_folder(GAME_RESOURCE_FOLDER, game_resources)
@@ -31,6 +37,12 @@ func _load_all_player_color_resources_from_folder():
 
 func _load_all_knowledge_cards_resources_from_folder():
 	_load_resources_from_folder(KNOWLEDGE_CARDS_RESOURCE_FOLDER, knowledge_cards)
+
+func _load_all_card_types_resources_from_folder():
+	_load_resources_from_folder(CARD_TYPES_RESOURCE_FOLDER, card_types)
+
+func _load_all_trades_resources_from_folder():
+	_load_resources_from_folder(TRADES_RESOURCE_FOLDER, trades)
 
 func _load_resources_from_folder(folder_name: String, resource_variable: Array) -> void:
 	# Open the folder
@@ -82,3 +94,6 @@ func get_knowledge_cards() -> Array[KnowledgeCardResource]:
 
 func get_max_number_of_knowledge_cards() -> int:
 	return MAX_KNOWLEDGE_CARD
+
+func get_trades() -> Array[TradeResource]:
+	return trades

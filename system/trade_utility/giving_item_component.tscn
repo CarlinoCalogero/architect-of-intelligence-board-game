@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bqcjhd0emm4pk"]
+
+[ext_resource type="Script" uid="uid://biywxq6n4pnfg" path="res://system/trade_utility/giving_item_component.gd" id="1_abhpm"]
+
+[node name="GivingItemComponent" type="HBoxContainer" unique_id=1412694152]
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+alignment = 1
+script = ExtResource("1_abhpm")
+
+[node name="ItemIconTextureRect" type="TextureRect" parent="." unique_id=16243425]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=802400171]
+layout_mode = 2
+
+[node name="AmountLabel" type="Label" parent="CenterContainer" unique_id=1495356213]
+layout_mode = 2
